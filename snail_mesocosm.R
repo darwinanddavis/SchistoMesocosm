@@ -1,6 +1,11 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+#13-6-18
+# phyto = flourescence units
+# peri = flourescence per 2 weeks / 3.5 inch^2 tile (gross productivity biomass rate)
+#added global cex params for plotting different cex sizes, e.g. cercariae, sampling effort
+
 #12-6-18
 #added stripchart for meso2 data
 
@@ -11,23 +16,26 @@
 # created plotting function
 
 # to do
-# make phyto and peri vs NP  into grouped bargraph
+# TO DO subset only by snails infected==Y
+# TO DO biomass =  The published weight-length regression that I mentioned last week is:
+    # [Soft tissue dry mass in mg] = 0.0096 * Diameter[in mm]^3
+# make phyto and peri vs NP into grouped bargraph
 # correlation coefficients between body mass (tissue) and parasite loading, periphyton consumed, diameter      
 # turn main() function into PDF markdown output
 
-# install dependencies
+##### install dependencies
 packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2", "svDialogs")   
 install.packages(packages,dependencies = T)
 lapply(packages,library,character.only=T)
 
-# get data
+##### get data
 # /Users/malishev/Documents/Emory/research/mesocosm
 wd <- dlgInput("Set working directory", "Your working dir (without quotation marks")$res # set working dir      
 setwd(paste0(wd,"/")); list.files() # setwd and list files
 f <- "meso1.csv"
 f2 <- "meso2.csv"
 
-# load data
+#### load data
 meso1 <- read.table(f,header=T,sep=",", row.names=NULL,stringsAsFactors=FALSE, strip.white=TRUE) # read data
 tail(meso1)
 meso2 <- read.table(f2,header=T,sep=",",row.names=NULL,stringsAsFactors=FALSE, strip.white=TRUE) # read data
@@ -35,7 +43,17 @@ tail(meso2)
 colnames(meso2)[2] <- "NP" # fix col names
 meso1[is.na(meso1)] <- 0 ; meso2[is.na(meso2)] <- 0 # remove NAs
 
-# set plotting graphics
+# cleaning Snail and Date cols
+unique(meso1$Snail)
+unique(meso1$Date)
+sapply(meso1, function(x) sum(nchar(x)))
+
+# set cex sizes
+cex_cer <- (meso1$Cercariae+1)/1000
+cex_sam <- meso1$Sampling_Effort/1.5
+cex_diam <- meso1$Diameter/3
+
+#### set plotting graphics
 plot_it <- function(manuscript,bg,cp,alpha,family){ # plotting function (plot for MS or not, set bg color, set color palette from RColorBrewer, set alpha value for transperancy) 
   graphics.off()
   if(manuscript==0){
@@ -59,19 +77,29 @@ plot_it <- function(manuscript,bg,cp,alpha,family){ # plotting function (plot fo
 }
 plot_it(0,"blue","Blues",1,"HersheySans") # set col function params
 
-# diameter
+##############################################################################
+
+## Snail diameter (mm) distribution
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 buffer <- 0.25
+col <- "lightblue"
 den <- density(meso1$Diameter)
+xlim <- max(den$x);xlim; ylim <- max(den$y);ylim
 plot(den,
-     col=adjustcolor("lightblue",alpha=0.5),
-     ylim=c(0,max(den$y)+(max(den$y)*buffer)),
+     col=adjustcolor(col,alpha=0.5),
+     xlim=c(0,xlim+(xlim*buffer)),
+     ylim=c(0,ylim+(ylim*buffer)),
      xlab="Diameter (mm)",
      ylab="Density",
      main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks"))
-polygon(den, col=adjustcolor("lightblue",alpha=0.5),border="lightblue") # fill AUC 
-abline(v=mean(meso1$Diameter),col="pink",lty=3,ylim=c(0,max(den$y)+(max(den$y)*buffer))) # get mean
+polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
+abline(v=mean(meso1$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
 
-# diameter over time (weeks)
+### Snail size over time (weeks)
+# Shell diameter (mm) over time (weeks)
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 buffer <- 0.25 # percentage buffer added to axes range 
 boxplot(Diameter~Week, data=meso1,
         ylim=c(0,max(meso1$Diameter+(meso1$Diameter*buffer))),
@@ -81,7 +109,10 @@ boxplot(Diameter~Week, data=meso1,
         )
 abline(h=mean(meso1$Diameter),col="pink",lty=3)
 
-# diameter per tank
+### Snail size per tank 
+# Shell diameter (mm) per tank
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 buffer <- 0.25
 boxplot(Diameter~Tank, data=meso1,
         ylim=c(0,max(meso1$Diameter+(meso1$Diameter*buffer))),
@@ -92,12 +123,13 @@ boxplot(Diameter~Tank, data=meso1,
 abline(h=mean(meso1$Diameter),col="pink",lty=3)
 with(meso1,t.test(Diameter,Tank)) # t.test
 
-# diameter v cercariae
-# point size by cercariae number
+### Snail size and number of cercariae produced
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# Point size by cercariae number
 par(mfrow=c(1,2))
 with(meso1,plot(Diameter,Cercariae,pch=20,
                 col=adjustcolor("light blue",alpha=0.5),
-                cex=(meso1$Cercariae+1)/1000,
+                cex=cex_cer,
                 ylab="Number of cercariae released over 90 mins",xlab="Diameter (mm)",
                 ))
 abline(v=mean(meso1$Diameter),lty=3,col="pink")# mean diameter
@@ -107,11 +139,10 @@ legend("topright",legend=paste0(unique(meso1$Sampling_Effort)," samples"),
        border="white",pch=20, col=brewer.pal(meso1$Sampling_Effort,"Blues")[1:3],
        pt.cex=3,
        bty="n")
-
-# point size by sampling effort
+# Point size by sampling effort
 with(meso1,plot(Diameter,Cercariae,pch=20,
                 col=adjustcolor(brewer.pal(meso1$Sampling_Effort,"Blues")[1:3],alpha=0.3),
-                cex=(meso1$Sampling_Effort)/1.5,
+                cex=cex_sam,
                 ylab="Number of cercariae released over 90 mins",xlab="Diameter (mm)",
 ))
 abline(v=mean(meso1$Diameter),lty=3,col="pink")# mean diameter
@@ -125,8 +156,53 @@ abline(v=mean(meso1$Diameter),lty=3,col="pink")# mean diameter
 #        # y.intersp=0.5,
 #        text.font=NULL)
 
+### Individual snail size 
+# Shell diameter (mm) 
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
+tank <- 5 # max 48
+snail <- subset(meso1,subset=Tank==tank) # get tank level indiviudals
+snail <- subset(snail,subset=Snail==sn) # then get indiviudal within that tank
+buffer <- 0.25
+col <- "lightblue"
+den <- density(snail$Diameter) # get diameter density
+xlim <- max(den$x);xlim; ylim <- max(den$y);ylim
+plot(den,
+     col=adjustcolor(col,alpha=0.5),
+     xlim=c(0,xlim+(xlim*buffer)),ylim=c(0,ylim+(ylim*buffer)),
+     xlab="",ylab="",main=""
+)
+polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
+abline(v=mean(snail$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+title(main=paste0("Shell diameter (mm) distribution for tank #",tank),
+      xlab="Shell diameter (mm)")
+title(ylab="Density",line=3.5)
+  
+### Individual cercariae production over time
+# Cercariae shed over 90 mins per week
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+tank <- 51 # max 48 
+snail <- subset(meso1,subset=Tank==tank);snail # get tank level indiviudals
+if(any(snail$Cercariae>0)){
+  buffer <- 0.25
+  xlim <- max(meso1$Week) # uses total num of weeks
+  ylim <- max(snail$Cercariae)
+  col <- "lightblue"
+  with(snail,plot(Cercariae~Week,
+       col=adjustcolor(col,alpha=0.5),
+       type="l",
+       xlim=c(0,xlim),ylim=c(0,ylim+(ylim*buffer)),
+       xlab="",ylab="",main=""
+  ))
+  abline(h=mean(snail$Cercariae),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+  title(main=paste0("Cercariae production for tank ",tank," over ",max(meso1$Week)," weeks"),
+        xlab="Week")
+  title(ylab="Number of cercariae shed in 90 mins",line=3.5)
+}else{print(paste0("No cercariae for individual ",sn," in tank ",tank))}
 
+############################################################################################################
 
+# Mesocosm 2 data sheet
 meso2$Schisto <- as.integer(as.factor(meso2$Schisto))-1# convert Y/N in Schisto col to 1/0
 # convert size to integers
 meso2$Size <- gsub("Intermediate","2Intermediate",meso2$Size)  
@@ -134,14 +210,31 @@ meso2$Size <- gsub("Small","1Small",meso2$Size)
 meso2$Size <- gsub("Large","3Large",meso2$Size) 
 meso2$Size <- as.integer(as.factor(meso2$Size))
 
-#size vs egg mass
-with(meso2,plot(Eggs~Size))
+## Egg mass distribution
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
+buffer <- 0.3
+col <- "lightblue"
+den <- density(meso2$Eggs)
+xlim <- max(den$x);xlim
+ylim <- max(den$y);ylim
+plot(den,
+     col=adjustcolor(col,alpha=0.5),
+     xlim=c(0,xlim+(xlim*buffer)),
+     ylim=c(0,ylim+(ylim*buffer)),
+     xlab="Number of egg masses",
+     ylab="Density",
+     main=paste0("Distribution of number of egg masses over ",max(meso1$Week)," weeks"))
+polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
+abline(v=mean(meso2$Eggs),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
 
-# N/P concentration v egg mass
+### N/P concentration v egg mass
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 with(meso2,stripchart(Eggs~NP,
                       method="jitter", jitter=0.1,
                       pch=20,
-                      cex=meso2$Size,
+                      cex=cex_diam,
                       col=adjustcolor("lightblue",alpha=0.3),
                       vertical=T,
                       group.names=c("High","Low"),
@@ -157,7 +250,7 @@ title(ylab="Number of egg masses",line=3.5)
 # phyto = flourescence units
 # peri = flourescence per 2 weeks / 3.5 inch^2 tile (gross productivity biomass rate)
 
-# N/P concentration v phyto
+### N/P concentration v phyto
 with(meso2,stripchart(Phyto_F~NP,
                       method="jitter", jitter=0.1,
                       pch=20,
@@ -187,11 +280,11 @@ with(meso2,stripchart(Peri_F~NP,
 ))
 abline(h=mean(meso2$Eggs),col="pink",lty=3)
 
-# make phyto and peri vs NP  into grouped bargraph
+# make phyto and peri vs NP into grouped bargraph
 buffer <- 0.3
+den <- density(meso2$Phyto_F)
 xlim <- max(den$x);xlim
 ylim <- max(den$y);ylim
-den <- density(meso2$Phyto_F)
 plot(den,
      col=adjustcolor("light blue",alpha=0.5),
      xlim=c(0,xlim+(xlim*buffer)),
@@ -218,28 +311,51 @@ title(main=paste0("Resource concentration over ",max(meso1$Week)," weeks"),
       xlab="Resource concentration")
 title(ylab="Density",line=3.5)
       
-
 # N/P concentration v presence of schisto
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
+head(meso2)
 
-# egg mass over time w/ presence of schisto. overlay phyto and pero conc as density polygon 
+# egg mass over time v presence of schisto. overlay phyto and pero conc as density polygon(?) 
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 
 # egg mass v phyto
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 
 # egg mass v peri
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 
-# diameter dists for different NP ranges
+# diameter dists for different NP levels
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 # https://www.statmethods.net/graphs/density.html
 
 # diameter vs phyto
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 
 # diameter vs peri
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 
-# diameter vs egg mass (with schisto)
+# Diameter vs egg mass (with schisto)
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
+plot(meso2$Eggs~meso1$Diameter)
+length(meso1$Diameter)/length(meso2$Eggs)
+head(meso2)
 
-# joyplot of egg mass over time for each size class
+# joyplot of egg mass over time for each tank/infected tank/ ... 
+### ~1000 eggs inoculated at 0,2,4,6 weeks
+# _______________________________________________ compare un/infected snails 
 
 
-#after sourcing above functions and codes
+###########################################################################################
+
+# After sourcing above functions and codes
 # print results output
 main<-function(){
   # set plot windows
