@@ -1,6 +1,9 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+#15-6-18
+# updated cerc production per tank plot to only select tanks with cerc produced and to include upper limit across all tanks
+
 #13-6-18
 # phyto = flourescence units
 # peri = flourescence per 2 weeks / 3.5 inch^2 tile (gross productivity biomass rate)
@@ -181,24 +184,24 @@ title(ylab="Density",line=3.5)
 ### Individual cercariae production over time
 # Cercariae shed over 90 mins per week
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
-tank <- 51 # max 48 
-snail <- subset(meso1,subset=Tank==tank);snail # get tank level indiviudals
-if(any(snail$Cercariae>0)){
-  buffer <- 0.25
-  xlim <- max(meso1$Week) # uses total num of weeks
-  ylim <- max(snail$Cercariae)
-  col <- "lightblue"
-  with(snail,plot(Cercariae~Week,
-       col=adjustcolor(col,alpha=0.5),
-       type="l",
-       xlim=c(0,xlim),ylim=c(0,ylim+(ylim*buffer)),
-       xlab="",ylab="",main=""
-  ))
-  abline(h=mean(snail$Cercariae),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
-  title(main=paste0("Cercariae production for tank ",tank," over ",max(meso1$Week)," weeks"),
-        xlab="Week")
-  title(ylab="Number of cercariae shed in 90 mins",line=3.5)
-}else{print(paste0("No cercariae for individual ",sn," in tank ",tank))}
+tank <- 2 # max 48 
+snail <- subset(meso1,subset=Cercariae>0);snail # get only cercariae
+snail <- subset(snail,subset=Tank==tank);snail # get tank level indiviudals
+buffer <- 0.25 # axis buffer
+cer_total <- 1 # set ylim either to max for tank or max across all tanks (6100) 
+xlim <- max(meso1$Week) # uses total num of weeks
+ifelse(cer_total==1,ylim <- round_any(max(meso1$Cercariae),100),ylim <- max(snail$Cercariae))
+col <- "lightblue" 
+with(snail,plot(Cercariae~Week,
+                col=adjustcolor(col,alpha=0.5),
+                type="p",
+                xlim=c(0,xlim),ylim=c(0,ylim+(ylim*buffer)),
+                xlab="",ylab="",main=""
+))
+abline(h=mean(snail$Cercariae),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+title(main=paste0("Cercariae production for tank ",tank," over ",max(meso1$Week)," weeks"),
+      xlab="Week")
+title(ylab="Number of cercariae shed in 90 mins",line=3.5)
 
 ############################################################################################################
 
