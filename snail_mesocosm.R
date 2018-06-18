@@ -163,12 +163,14 @@ abline(v=mean(meso1$Diameter),lty=3,col="pink")# mean diameter
 # Shell diameter (mm) 
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
-tank <- 3 # max 48
+tank <- 30 # max 48
 snail <- subset(meso1,subset=Tank==tank) # get tank level indiviudals
 buffer <- 0.25
+diam_total <- 1 # set ylim either to max for tank or max across all tanks (16.8) 
 col <- "lightblue"
 den <- density(snail$Diameter) # get diameter density
-xlim <- max(den$x);xlim; ylim <- max(den$y);ylim
+xlim <- max(den$x);xlim
+ylim <- max(den$y);ylim
 plot(den,
      col=adjustcolor(col,alpha=0.5),
      xlim=c(0,xlim+(xlim*buffer)),ylim=c(0,ylim+(ylim*buffer)),
@@ -179,6 +181,7 @@ abline(v=mean(snail$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get 
 title(main=paste0("Shell diameter (mm) distribution for tank #",tank),
       xlab="Shell diameter (mm)")
 title(ylab="Density",line=3.5)
+
   
 ### Individual cercariae production over time
 # Cercariae shed over 90 mins per week
