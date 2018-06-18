@@ -19,10 +19,11 @@
 # created plotting function
 
 # to do
-# TO DO subset only by snails infected==Y
+# TO DO subset only by snails infected
 # TO DO biomass =  The published weight-length regression that I mentioned last week is:
     # [Soft tissue dry mass in mg] = 0.0096 * Diameter[in mm]^3
 # make phyto and peri vs NP into grouped bargraph
+# Try population Pyramid plot for infected v uninfected /Users/malishev/Documents/Melbourne Uni/Programs/R code
 # correlation coefficients between body mass (tissue) and parasite loading, periphyton consumed, diameter      
 # turn main() function into PDF markdown output
 
@@ -161,8 +162,8 @@ abline(v=mean(meso1$Diameter),lty=3,col="pink")# mean diameter
 
 ### Snail size per tank
 # Shell diameter (mm) 
-### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
+par(mfrow=c(1,1))
 tank <- 30 # max 48
 snail <- subset(meso1,subset=Tank==tank) # get tank level indiviudals
 buffer <- 0.25
@@ -181,7 +182,6 @@ abline(v=mean(snail$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get 
 title(main=paste0("Shell diameter (mm) distribution for tank #",tank),
       xlab="Shell diameter (mm)")
 title(ylab="Density",line=3.5)
-
   
 ### Individual cercariae production over time
 # Cercariae shed over 90 mins per week
@@ -190,7 +190,7 @@ tank <- 2 # max 48
 snail <- subset(meso1,subset=Cercariae>0);snail # get only cercariae
 snail <- subset(snail,subset=Tank==tank);snail # get tank level indiviudals
 buffer <- 0.25 # axis buffer
-cer_total <- 1 # set ylim either to max for tank or max across all tanks (6100) 
+cer_total <- 0 # set ylim either to max for tank or max across all tanks (6100) 
 xlim <- max(meso1$Week) # uses total num of weeks
 ifelse(cer_total==1,ylim <- round_any(max(meso1$Cercariae),100),ylim <- max(snail$Cercariae))
 col <- "lightblue" 
@@ -204,7 +204,16 @@ abline(h=mean(snail$Cercariae),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get
 title(main=paste0("Cercariae production for tank ",tank," over ",max(meso1$Week)," weeks"),
       xlab="Week")
 title(ylab="Number of cercariae shed in 90 mins",line=3.5)
+par(new=T)
+points(x=c(0,2,4,6),y=rep(50,4),type="h",col="red")# add inoculation points
 
+with(snail,barplot(Cercariae~Week,
+                col=adjustcolor(col,alpha=0.5),
+                height=2,
+                xlim=c(0,xlim),ylim=c(0,ylim+(ylim*buffer)),
+                xlab="",ylab="",main=""
+))
+?plot
 ############################################################################################################
 
 # Mesocosm 2 data sheet
