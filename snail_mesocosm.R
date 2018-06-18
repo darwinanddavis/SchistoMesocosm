@@ -3,7 +3,7 @@
 
 #15-6-18
 # updated cerc production per tank plot to only select tanks with cerc produced and to include upper limit across all tanks
-
+ 
 #13-6-18
 # phyto = flourescence units
 # peri = flourescence per 2 weeks / 3.5 inch^2 tile (gross productivity biomass rate)
@@ -159,13 +159,12 @@ abline(v=mean(meso1$Diameter),lty=3,col="pink")# mean diameter
 #        # y.intersp=0.5,
 #        text.font=NULL)
 
-### Individual snail size 
+### Snail size per tank
 # Shell diameter (mm) 
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
-tank <- 5 # max 48
+tank <- 3 # max 48
 snail <- subset(meso1,subset=Tank==tank) # get tank level indiviudals
-snail <- subset(snail,subset=Snail==sn) # then get indiviudal within that tank
 buffer <- 0.25
 col <- "lightblue"
 den <- density(snail$Diameter) # get diameter density
