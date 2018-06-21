@@ -1,6 +1,9 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+#21-6-18
+# separated un/infected data
+
 #15-6-18
 # updated cerc production per tank plot to only select tanks with cerc produced and to include upper limit across all tanks
  
@@ -22,9 +25,8 @@
 # TO DO subset only by snails infected
 # TO DO biomass =  The published weight-length regression that I mentioned last week is:
     # [Soft tissue dry mass in mg] = 0.0096 * Diameter[in mm]^3
-# make phyto and peri vs NP into grouped bargraph
 # Try population Pyramid plot for infected v uninfected /Users/malishev/Documents/Melbourne Uni/Programs/R code
-# correlation coefficients between body mass (tissue) and parasite loading, periphyton consumed, diameter      
+# correlation coefficients between body mass (tissue) and cerc produced, periphyton consumed, diameter      
 # turn main() function into PDF markdown output
 
 ##### install dependencies
@@ -50,7 +52,7 @@ meso1[is.na(meso1)] <- 0 ; meso2[is.na(meso2)] <- 0 # remove NAs
 # cleaning Snail and Date cols
 unique(meso1$Snail)
 unique(meso1$Date)
-sapply(meso1, function(x) sum(nchar(x)))
+sapply(meso1, function(x) sum(nchar(x))) # check number of characters in each col
 
 # set cex sizes
 cex_cer <- (meso1$Cercariae+1)/1000
@@ -79,13 +81,14 @@ plot_it <- function(manuscript,bg,cp,alpha,family){ # plotting function (plot fo
    # colfunc <<- colorRampPalette(brewer.pal(9,cp),alpha=alpha)
   colfunc <<- adjustcolor(brewer.pal(9,cp),alpha=alpha) # USES <<- OPERATOR
 }
-plot_it(0,"blue","Blues",1,"HersheySans") # set col function params
+print("1/0, set colour, set colour palette 'display.brewer.all()',set alpha for col,set font")
+plot_it(0,"black","Blues",1,"HersheySans") # set col function params
 
 ##############################################################################
 
 ## Snail diameter (mm) distribution
-### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
+
 buffer <- 0.25
 col <- "lightblue"
 den <- density(meso1$Diameter)
@@ -106,16 +109,18 @@ abline(v=mean(meso1$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get 
 # _______________________________________________ compare un/infected snails 
 buffer <- 0.25 # percentage buffer added to axes range 
 boxplot(Diameter~Week, data=meso1,
+        # xlim=c(0,max(meso1$Week)),
         ylim=c(0,max(meso1$Diameter+(meso1$Diameter*buffer))),
         col = "light blue",
         notch = T,xlab="Week",ylab="Diameter (mm)",
         main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks")
         )
 abline(h=mean(meso1$Diameter),col="pink",lty=3)
+par(new=T)
+points(x=c(1,3,5,7),y=rep(30,4),pch=6,col="red")# add inoculation points
 
 ### Snail size per tank 
 # Shell diameter (mm) per tank
-### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
 buffer <- 0.25
 boxplot(Diameter~Tank, data=meso1,
@@ -130,27 +135,14 @@ with(meso1,t.test(Diameter,Tank)) # t.test
 ### Snail size and number of cercariae produced
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # Point size by cercariae number
-par(mfrow=c(1,2))
+col <- "lightblue"
 with(meso1,plot(Diameter,Cercariae,pch=20,
                 col=adjustcolor("light blue",alpha=0.5),
                 cex=cex_cer,
                 ylab="Number of cercariae released over 90 mins",xlab="Diameter (mm)",
                 ))
-abline(v=mean(meso1$Diameter),lty=3,col="pink")# mean diameter
-par(family="mono")
-legend("topright",legend=paste0(unique(meso1$Sampling_Effort)," samples"),
-       title ="Sampling effort",
-       border="white",pch=20, col=brewer.pal(meso1$Sampling_Effort,"Blues")[1:3],
-       pt.cex=3,
-       bty="n")
-# Point size by sampling effort
-with(meso1,plot(Diameter,Cercariae,pch=20,
-                col=adjustcolor(brewer.pal(meso1$Sampling_Effort,"Blues")[1:3],alpha=0.3),
-                cex=cex_sam,
-                ylab="Number of cercariae released over 90 mins",xlab="Diameter (mm)",
-))
-abline(v=mean(meso1$Diameter),lty=3,col="pink")# mean diameter
-# legend("right",legend=paste0(unique(meso1$Sampling_Effort)," samples"),
+abline(v=mean(meso1$Diameter),lty=3,col=col)# mean diameter
+# legend(c(50,5500),legend=paste0(unique(meso1$Sampling_Effort)," samples"),
 #        title ="Sampling effort",
 #        border="white",pch=20,col=brewer.pal(meso1$Sampling_Effort,"Blues")[1:3],
 #        pt.cex=unique(meso1$Sampling_Effort),
@@ -163,8 +155,8 @@ abline(v=mean(meso1$Diameter),lty=3,col="pink")# mean diameter
 ### Snail size per tank
 # Shell diameter (mm) 
 # _______________________________________________ compare un/infected snails 
-par(mfrow=c(1,1))
-tank <- 30 # max 48
+# @@@ joyplot
+tank <- 3 # select tank #. max 48
 snail <- subset(meso1,subset=Tank==tank) # get tank level indiviudals
 buffer <- 0.25
 diam_total <- 1 # set ylim either to max for tank or max across all tanks (16.8) 
@@ -207,13 +199,12 @@ title(ylab="Number of cercariae shed in 90 mins",line=3.5)
 par(new=T)
 points(x=c(0,2,4,6),y=rep(50,4),type="h",col="red")# add inoculation points
 
-with(snail,barplot(Cercariae~Week,
+with(snail,barplot(Cercariae,
                 col=adjustcolor(col,alpha=0.5),
-                height=2,
                 xlim=c(0,xlim),ylim=c(0,ylim+(ylim*buffer)),
                 xlab="",ylab="",main=""
 ))
-?plot
+?barplot
 ############################################################################################################
 
 # Mesocosm 2 data sheet
