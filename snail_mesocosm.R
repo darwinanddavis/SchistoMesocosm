@@ -1,6 +1,10 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+#25-6-18
+# added mass to meso1
+# potential outlier for body mass (1239.301 mg)?
+
 #21-6-18
 # separated un/infected data
 
@@ -22,9 +26,7 @@
 # created plotting function
 
 # to do
-# TO DO subset only by snails infected
-# TO DO biomass =  The published weight-length regression that I mentioned last week is:
-    # [Soft tissue dry mass in mg] = 0.0096 * Diameter[in mm]^3
+# plot overall and un/infected plots as stacked plots in one plot view  
 # Try population Pyramid plot for infected v uninfected /Users/malishev/Documents/Melbourne Uni/Programs/R code
 # correlation coefficients between body mass (tissue) and cerc produced, periphyton consumed, diameter      
 # turn main() function into PDF markdown output
@@ -43,11 +45,16 @@ f2 <- "meso2.csv"
 
 #### load data
 meso1 <- read.table(f,header=T,sep=",", row.names=NULL,stringsAsFactors=FALSE, strip.white=TRUE) # read data
-tail(meso1)
 meso2 <- read.table(f2,header=T,sep=",",row.names=NULL,stringsAsFactors=FALSE, strip.white=TRUE) # read data
-tail(meso2)
 colnames(meso2)[2] <- "NP" # fix col names
 meso1[is.na(meso1)] <- 0 ; meso2[is.na(meso2)] <- 0 # remove NAs
+mass <- 0.0096*(meso1$Diameter^3) # add mass to df
+meso1$Mass <- mass  
+
+####### outlier ########
+print("Outlier"); meso1[which(meso1$Mass==max(meso1$Mass)),]
+outlier <- 0 # remove outlier from data?
+if(outlier==1){meso1 <- subset(meso1,Mass<max(Mass))}
 
 # cleaning Snail and Date cols
 unique(meso1$Snail)
@@ -82,13 +89,14 @@ plot_it <- function(manuscript,bg,cp,alpha,family){ # plotting function (plot fo
   colfunc <<- adjustcolor(brewer.pal(9,cp),alpha=alpha) # USES <<- OPERATOR
 }
 print("1/0, set colour, set colour palette 'display.brewer.all()',set alpha for col,set font")
-plot_it(0,"black","Blues",1,"HersheySans") # set col function params
+plot_it(0,"blue","Blues",1,"HersheySans") # set col function params
 
 ##############################################################################
+# get only infected snails
+meso1_II <- subset(meso1,subset=Cercariae>0);length(meso1_II$Tank)
+meso1_UU <- subset(meso1,subset=Cercariae==0);length(meso1_UU$Tank) 
 
 ## Snail diameter (mm) distribution
-# _______________________________________________ compare un/infected snails 
-
 buffer <- 0.25
 col <- "lightblue"
 den <- density(meso1$Diameter)
@@ -103,22 +111,62 @@ plot(den,
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
 abline(v=mean(meso1$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
 
+### un/infected ###
+col <- "lightblue" # uninfected
+col2 <- "orange" 
+den <- density(meso1_UU$Diameter)
+xlim <- max(den$x);xlim; ylim <- max(den$y);ylim
+plot(den,
+     col=adjustcolor(col,alpha=0.5),
+     xlim=c(0,xlim+(xlim*buffer)),
+     ylim=c(0,ylim+(ylim*buffer)),
+     xlab="Diameter (mm)",
+     ylab="Density",
+     main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks"))
+polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
+abline(v=mean(meso1_UU$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+par(new=T)
+den2 <- density(meso1_II$Diameter) # infected
+plot(den2,
+     col=adjustcolor(col2,alpha=0.5),
+     xlim=c(0,xlim+(xlim*buffer)),
+     ylim=c(0,ylim+(ylim*buffer)),
+     xlab="",
+     ylab="",
+     main="")
+polygon(den2, col=adjustcolor(col2,alpha=0.5),border=col2) # fill AUC 
+abline(v=mean(meso1_II$Diameter),col=col2,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+
+
 ### Snail size over time (weeks)
 # Shell diameter (mm) over time (weeks)
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
+col <- "light blue"
 buffer <- 0.25 # percentage buffer added to axes range 
 boxplot(Diameter~Week, data=meso1,
         # xlim=c(0,max(meso1$Week)),
         ylim=c(0,max(meso1$Diameter+(meso1$Diameter*buffer))),
-        col = "light blue",
+        col = col,
         notch = T,xlab="Week",ylab="Diameter (mm)",
         main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks"),
         xaxs = "i", yaxs = "i"
         )
-abline(h=mean(meso1$Diameter),col="pink",lty=3)
+abline(h=mean(meso1$Diameter),col=col,lty=3)
 par(new=T)
-points(x=c(1,3,5,7),y=rep(30,4),pch=6,col="red")# add inoculation points
+points(x=c(1,3,5,7),y=rep(30,4),pch="~",col="red")# add inoculation points
+
+# Body mass (mg) over time (weeks) (Soft tissue dry mass in mg = 0.0096 * Diameter[in mm]^3)
+col <- "orange"
+boxplot(Mass~Week, data=meso1,
+        # xlim=c(0,max(meso1$Week)),
+        ylim=c(0,max(meso1$Mass+(meso1$Mass*buffer))),
+        col = col,
+        notch = T,xlab="Week",ylab="Dry body mass (mg)",
+        main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks"),
+        xaxs = "i", yaxs = "i"
+)
+abline(h=mean(meso1$Mass),col=col,lty=3)
 
 ### Snail size per tank 
 # Shell diameter (mm) per tank
@@ -137,11 +185,14 @@ with(meso1,t.test(Diameter,Tank)) # t.test
 # Point size by cercariae number
 col <- "lightblue"
 with(meso1,plot(Diameter,Cercariae,pch=20,
-                col=adjustcolor("light blue",alpha=0.5),
+                col=adjustcolor(col,alpha=0.5),
                 cex=cex_cer,
                 ylab="Number of cercariae released over 90 mins",xlab="Diameter (mm)",
                 ))
+title("Number of cercarie for each snail length (mm)")
 abline(v=mean(meso1$Diameter),lty=3,col=col)# mean diameter
+outer <- meso1[which(meso1$Mass==max(meso1$Mass)),][,c("Diameter","Cercariae")] # identify outlier 
+points(outer,col="red",pch=20) # plot outlier
 # legend(c(50,5500),legend=paste0(unique(meso1$Sampling_Effort)," samples"),
 #        title ="Sampling effort",
 #        border="white",pch=20,col=brewer.pal(meso1$Sampling_Effort,"Blues")[1:3],
@@ -151,6 +202,19 @@ abline(v=mean(meso1$Diameter),lty=3,col=col)# mean diameter
 #        adj=-2,
 #        # y.intersp=0.5,
 #        text.font=NULL)
+
+### Snail mass and cercariae produced (mg)
+col <- "orange"
+with(meso1,plot(Mass,Cercariae,pch=20,
+                col=adjustcolor(col,alpha=0.5),
+                cex=cex_cer,
+                ylab="Number of cercariae released over 90 mins",xlab="Dry body mass (mg)",
+))
+title("Number of cercariae for each snail mass (mg)")
+abline(v=mean(meso1$Mass),lty=3,col=col)# mean diameter
+outer <- meso1[which(meso1$Mass==max(meso1$Mass)),][,c("Mass","Cercariae")] # identify outlier 
+points(outer,col="red",pch=20) # plot outlier      
+
 
 ### Snail size per tank
 # Shell diameter (mm) 
@@ -214,7 +278,6 @@ meso2$Size <- gsub("Large","3Large",meso2$Size)
 meso2$Size <- as.integer(as.factor(meso2$Size))
 
 ## Egg mass distribution
-### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
 buffer <- 0.3
 col <- "lightblue"
@@ -232,8 +295,8 @@ polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC
 abline(v=mean(meso2$Eggs),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
 
 ### N/P concentration v egg mass
-### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
+col <- "light blue"
 with(meso2,stripchart(Eggs~NP,
                       method="jitter", jitter=0.1,
                       pch=20,
@@ -245,45 +308,17 @@ with(meso2,stripchart(Eggs~NP,
                       ylab="",
                       main="")
      )
-abline(h=mean(meso2$Eggs),col="pink",lty=3)
-title(main=paste0("Number of egg masses for high and low N/P \n levels over ",max(meso1$Week)," weeks"),
+abline(h=mean(meso2$Eggs),col=col,lty=3)
+title(main=paste0("Number of egg masses for high and low N/P levels over ",max(meso1$Week)," weeks"),
+      sub="(by snail diameter)",
+      col.sub="gray",
       xlab="N/P level")
 title(ylab="Number of egg masses",line=3.5)
 
 # phyto = flourescence units
 # peri = flourescence per 2 weeks / 3.5 inch^2 tile (gross productivity biomass rate)
 
-### N/P concentration v phyto
-with(meso2,stripchart(Phyto_F~NP,
-                      method="jitter", jitter=0.1,
-                      pch=20,
-                      cex=1,
-                      col=adjustcolor("light blue",alpha=0.3),
-                      vertical=T,
-                      group.names=c("High","Low"),
-                      xlab="",
-                      ylab="",
-                      main="")
-     )
-abline(h=mean(meso2$Eggs),col="pink",lty=3)
-title(main=paste0("Phytoplankton concentration for high and low N/P \n levels over ",max(meso1$Week)," weeks"),
-      xlab="N/P level")
-title(ylab="Phytoplankton concentration",line=3.5)
-
-# N/P concentration v peri
-with(meso2,stripchart(Peri_F~NP,
-                      method="jitter", jitter=0.1,
-                      pch=20,
-                      cex=1,
-                      col=adjustcolor("light blue",alpha=0.3),
-                      vertical=T,
-                      group.names=c("High","Low"),
-                      xlab="N/P concentration",ylab="Periphyton concentration",
-                      main=paste0("Phytoplankton concentration for high and low N/P \n levels over ",max(meso1$Week)," weeks")
-))
-abline(h=mean(meso2$Eggs),col="pink",lty=3)
-
-# make phyto and peri vs NP into grouped bargraph
+# phyto and peri distribution 
 col1 <- "lightblue"
 col2 <- "orange"
 buffer <- 0.3
@@ -326,6 +361,7 @@ legend("topright",legend=c("Phytoplankton","Periphyton"),title="Resource type",
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
 head(meso2)
+head(meso1)
 
 # egg mass over time v presence of schisto. overlay phyto and pero conc as density polygon(?) 
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
@@ -390,4 +426,35 @@ main<-function(){
   par(mfrow = c(1,1))
 }
 
+############### Lab ##################
+
+### N/P concentration v phyto
+with(meso2,stripchart(Phyto_F~NP,
+                      method="jitter", jitter=0.1,
+                      pch=20,
+                      cex=1,
+                      col=adjustcolor("light blue",alpha=0.3),
+                      vertical=T,
+                      group.names=c("High","Low"),
+                      xlab="",
+                      ylab="",
+                      main="")
+)
+abline(h=mean(meso2$Eggs),col="pink",lty=3)
+title(main=paste0("Phytoplankton concentration for high and low N/P \n levels over ",max(meso1$Week)," weeks"),
+      xlab="N/P level")
+title(ylab="Phytoplankton concentration",line=3.5)
+
+# N/P concentration v peri
+with(meso2,stripchart(Peri_F~NP,
+                      method="jitter", jitter=0.1,
+                      pch=20,
+                      cex=1,
+                      col=adjustcolor("light blue",alpha=0.3),
+                      vertical=T,
+                      group.names=c("High","Low"),
+                      xlab="N/P concentration",ylab="Periphyton concentration",
+                      main=paste0("Periphyton concentration for high and low N/P \n levels over ",max(meso1$Week)," weeks")
+))
+abline(h=mean(meso2$Eggs),col="pink",lty=3)
 
