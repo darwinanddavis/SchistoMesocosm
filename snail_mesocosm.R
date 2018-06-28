@@ -36,7 +36,7 @@
 # turn main() function into PDF markdown output
 
 ##### install dependencies
-packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2", "svDialogs")   
+packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2","ggridges","svDialogs","data.table")   
 install.packages(packages,dependencies = T)
 lapply(packages,library,character.only=T)
 
@@ -357,9 +357,16 @@ if(length(snail$Cercariae)>0){
 }else{print(paste0("No cercariae in tank #",tank))}
 
 ############################################################################################################
+############################################################################################################
+############################################################################################################
 
 # Mesocosm 2 data sheet
 meso2$Schisto <- as.integer(as.factor(meso2$Schisto))-1# convert Y/N in Schisto col to 1/0
+# convert size to integers
+meso2$Size <- gsub("Intermediate","2Intermediate",meso2$Size)  
+meso2$Size <- gsub("Small","1Small",meso2$Size) 
+meso2$Size <- gsub("Large","3Large",meso2$Size) 
+meso2$Size <- as.integer(as.factor(meso2$Size))
 
 ### get snails with egg masses
 #### First get presence of schisto
@@ -372,11 +379,6 @@ eggs_UU <- subset(meso2_UU,Eggs>0)
 eggs_II <- subset(meso2_II,Eggs>0)
 
 # get size classes 
-# convert size to integers
-meso2$Size <- gsub("Intermediate","2Intermediate",meso2$Size)  
-meso2$Size <- gsub("Small","1Small",meso2$Size) 
-meso2$Size <- gsub("Large","3Large",meso2$Size) 
-meso2$Size <- as.integer(as.factor(meso2$Size))
 small <- subset(meso2,Size==1) #small
 int <- subset(meso2,Size==2) #intermediate
 large <- subset(meso2,Size==3) #large
@@ -546,6 +548,7 @@ axis(1,at=c(0,xlim),labels=c("0","16"))# bookending axis tick marks
 
 # size class vs egg mass (with schisto)
 # _______________________________________________ compare un/infected snails 
+# small, int, large
 
 #### Egg masses > 0  
 den <- density(small$Eggs[small$Eggs>0])
@@ -554,39 +557,76 @@ den3 <- density(large$Eggs[large$Eggs>0])
 xlim <- round_any(max(den2$x),100) #den2 xlim
 ylim <- round_any(max(den2$y),0.01,ceiling);ylim # den2 ylim
 
+graphics.off()
 colvec <- c(4,6,9) # index for colfunc color palette in plot_it function 
+par(mfrow=c(1,1))
 plot(den,
      col=adjustcolor(colfunc[colvec[1]],alpha=0.5),
      xlim=c(0,xlim),
      ylim=c(0,ylim),
+     # type="h",# fills density
      xlab="Number of egg masses",
      ylab="Density",
-     main=""
+     main="Number of egg masses for each snail size class"
      )
-lines(den2,col=colfunc[colvec[2]])
-lines(den3,col=colfunc[colvec[3]])
-
+lines(den2,col=adjustcolor(colfunc[colvec[2]])) # den2
+lines(den3,col=adjustcolor(colfunc[colvec[3]])) # den3
+# fill densities
 polygon(den, col=adjustcolor(colfunc[colvec[1]],alpha=0.5),border=colfunc[colvec[1]]) # fill AUC 
 polygon(den2, col=adjustcolor(colfunc[colvec[2]],alpha=0.5),border=colfunc[colvec[2]]) # fill AUC 
 polygon(den3, col=adjustcolor(colfunc[colvec[3]],alpha=0.5),border=colfunc[colvec[3]]) # fill AUC 
-
+# means
 abline(v=mean(small$Eggs),col=adjustcolor(colfunc[colvec[1]]),lty=3,ylim=c(0,ylim)) # get mean
 abline(v=mean(int$Eggs),col=adjustcolor(colfunc[colvec[2]]),lty=3,ylim=c(0,ylim)) # get mean
 abline(v=mean(large$Eggs),col=adjustcolor(colfunc[colvec[3]]),lty=3,ylim=c(0,ylim)) # get mean
 
+par(family="mono")
+legend("right",legend=c("Small","Intermediate","Large"),col=c(colfunc[colvec[1:3]]),
+       bty="n",pch=20,pt.cex=1.5,cex=0.7,y.intersp = 0.5, xjust = 0.5,
+       title="Snail size class",title.adj = 0.3,text.font=2,
+       trace=T,inset=0.1)
 
-with(small,plot(Eggs~Phyto_F,ylim=c(0,200)))
-with(int,plot(Eggs~Phyto_F,ylim=c(0,200)))
-with(large,plot(Eggs~Phyto_F,ylim=c(0,200)))
-
+### Uninfected  
+small_UU <- subset(small,Schisto==0)
+int_UU <- subset(int,Schisto==0)
+large_UU <- subset(large,Schisto==0)
+### Infected
+small_II <- subset(small,Schisto==1)
+int_II <- subset(int,Schisto==1)
+large_II <- subset(large,Schisto==1)
 
 # joyplot of egg mass over time for each tank/infected tank/ ... 
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
 
-par(new=T)
-points(x=c(0,2,4,6),y=rep(30,4),pch="~",cex=1.5,col="red")# add inoculation points
+# egg mass density per week
+head(meso2)
+ggplot(meso2, aes(Week, Eggs)) + 
+  geom_density_ridges(scale = 3) # scale = overlap
 
+ggplot(lincoln_weather, aes(x = `Mean Temperature [F]`, y = `Month`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  scale_fill_viridis(name = "Temp. [F]", option = "C") +
+  labs(title = 'Temperatures in Lincoln NE in 2016')
+
+stat_density_ridges(quantile_lines = TRUE, quantiles = 2)
+
+# create df of eggs, week, and egg density 
+denn <- density(meso2$Eggs)
+den_list <- list()
+for(i in meso2$Week){
+  #subset meso2 by weeks
+  
+  # then get density for each week
+  den <- density(meso2$Eggs)
+  den_list[i] <- den
+}
+str(den_list)
+
+
+#example data
+d <- data.frame(x = rep(1:5, 3), y = c(rep(0, 5), rep(1, 5), rep(2, 5)),
+                height = c(0, 1, 3, 4, 0, 1, 2, 3, 5, 4, 0, 5, 4, 4, 1))
 
 ###########################################################################################
 
