@@ -1,6 +1,10 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+#28-6-18
+# plot_it_gg() function for ggplot global params
+# ggridges for egg masses per week/tank
+
 # 27-6-18
 # meso2 egg mass data uses only (Eggs > 0), which excludes presence of schisto
 
@@ -36,7 +40,7 @@
 # turn main() function into PDF markdown output
 
 ##### install dependencies
-packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2","ggridges","svDialogs","data.table")   
+packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2","ggridges","ggjoy","ggthemes","svDialogs","data.table","tibble","extrafont")   
 install.packages(packages,dependencies = T)
 lapply(packages,library,character.only=T)
 
@@ -92,8 +96,24 @@ plot_it <- function(manuscript,bg,cp,alpha,family){ # plotting function (plot fo
    # colfunc <<- colorRampPalette(brewer.pal(9,cp),alpha=alpha)
   colfunc <<- adjustcolor(brewer.pal(9,cp),alpha=alpha) # USES <<- OPERATOR
 }
+
+### Setting ggplot theme graphics
+plot_it_gg <- function(bg){ # bg = colour to plot bg, family = font family
+  if(bg=="black"){
+    colvec<-magma(200,1)
+    bg <- colvec[1]
+  }else{
+    colvec<-bpy.colors(200)
+    bg = colvec[1]
+  }
+  theme_tufte(base_family = "HersheySans") +
+    theme(panel.border = element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_rect(fill = bg,colour = bg),plot.background = element_rect(fill=bg)) +
+    theme(axis.line = element_line(color = "white")) +theme(axis.ticks = element_line(color = "white")) +theme(plot.title = element_text(colour = "white")) +theme(axis.title.x = element_text(colour = "white"), axis.title.y = element_text(colour = "white")) +theme(axis.text.x = element_text(color = "white"),axis.text.y = element_text(color = "white")) +theme(legend.key = element_rect(fill = bg)) + theme(legend.title = element_text(colour="white")) + theme(legend.text = element_text(colour="white")) 
+}
+
 print("1/0, set colour, set colour palette 'display.brewer.all()',set alpha for col,set font")
 plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
+plot_it_gg("blue") # same as above
 
 # get only infected snails
 meso1_II <- subset(meso1,subset=Cercariae>0);length(meso1_II$Tank)
@@ -185,6 +205,19 @@ abline(h=mean(meso1_II$Diameter),col=col,lty=3)
 par(new=T)
 points(x=c(1,3),y=rep(ylim/2,2),pch="~",col="red")# add inoculation points
 
+gradient <- 1 # plot with color gradient?
+### Diameter per week (minus outlier)
+ggplot(subset(meso1,Diameter<max(Diameter)), aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+  # scale = overlap
+  geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+  geom_density_ridges(scale = 4, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
+  scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  labs(title = "Snail diameter (mm) per week") +
+  xlab("Snail diameter (mm)") +
+  ylab("Week") +
+  # theme_ridges(grid=F,center_axis_labels = T)
+  plot_it_gg(bg)
+
 ### Body mass (mg) over time (weeks) (Soft tissue dry mass in mg = 0.0096 * Diameter[in mm]^3)
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 ylim <- round_any(max(meso1$Mass),100,ceiling);ylim
@@ -217,12 +250,12 @@ boxplot(Mass~Week, data=meso1_II,
         # xlim=c(0,max(meso1$Week)),
         ylim=c(0,ylim),
         col = col2,
-        notch = T,xlab="Week",ylab="Dry body mass (mg)",
+        notch = F,xlab="Week",ylab="Dry body mass (mg)",
         main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks \n(uninfected)"),
         xaxs = "i", yaxs = "i"
 )
 abline(h=mean(meso1$Mass),col=col2,lty=3)
-points(x=c(1,3),y=rep(ylim,2),pch="~",col="red")# add inoculation points
+points(x=c(1,3),y=rep(ylim/1.2,2),pch="~",col="red")# add inoculation points
 
 ### Snail size per tank 
 # Shell diameter (mm) per tank
@@ -243,21 +276,12 @@ with(meso1,t.test(Diameter,Tank)) # t.test
 with(meso1,plot(Diameter,Cercariae,pch=20,
                 col=adjustcolor(col,alpha=0.5),
                 cex=cex_cer,
-                ylab="Number of cercariae released over 90 mins",xlab="Diameter (mm)",
+                ylab="Number of cercariae released over 90 mins",xlab="Diameter (mm)"
                 ))
 title("Number of cercarie for each snail length (mm)")
 abline(v=mean(meso1$Diameter),lty=3,col=col)# mean diameter
 outer <- meso1[which(meso1$Mass==max(meso1$Mass)),][,c("Diameter","Cercariae")] # identify outlier 
 points(outer,col="red",pch=20) # plot outlier
-# legend(c(50,5500),legend=paste0(unique(meso1$Sampling_Effort)," samples"),
-#        title ="Sampling effort",
-#        border="white",pch=20,col=brewer.pal(meso1$Sampling_Effort,"Blues")[1:3],
-#        pt.cex=unique(meso1$Sampling_Effort),
-#        bty="n",
-#        # xjust=1,
-#        adj=-2,
-#        # y.intersp=0.5,
-#        text.font=NULL)
 
 ### Snail mass and cercariae produced (mg)
 with(meso1,plot(Mass,Cercariae,pch=20,
@@ -389,7 +413,7 @@ low <- subset(meso2,NP=="Low") # low NP conc
 
 ## Egg mass distribution
 # _______________________________________________ compare un/infected snails 
-buffer <- 0.3
+
 den <- density(meso2$Eggs[meso2$Eggs>0]) # get only snails with eggs
 xlim <- round_any(max(den$x),50,ceiling);xlim
 ylim <- round_any(max(den$y),0.01,ceiling);ylim
@@ -557,7 +581,6 @@ den3 <- density(large$Eggs[large$Eggs>0])
 xlim <- round_any(max(den2$x),100) #den2 xlim
 ylim <- round_any(max(den2$y),0.01,ceiling);ylim # den2 ylim
 
-graphics.off()
 colvec <- c(4,6,9) # index for colfunc color palette in plot_it function 
 par(mfrow=c(1,1))
 plot(den,
@@ -595,38 +618,59 @@ small_II <- subset(small,Schisto==1)
 int_II <- subset(int,Schisto==1)
 large_II <- subset(large,Schisto==1)
 
-# joyplot of egg mass over time for each tank/infected tank/ ... 
+### joyplot of egg mass per week 
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
 
-# egg mass density per week
-head(meso2)
-ggplot(meso2, aes(Week, Eggs)) + 
-  geom_density_ridges(scale = 3) # scale = overlap
+# set data to appropriate class
+meso2$Eggs <- as.numeric(meso2$Eggs)
+meso2$Week <- as.factor(meso2$Week)
+d <- meso2
 
-ggplot(lincoln_weather, aes(x = `Mean Temperature [F]`, y = `Month`, fill = ..x..)) +
-  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
-  scale_fill_viridis(name = "Temp. [F]", option = "C") +
-  labs(title = 'Temperatures in Lincoln NE in 2016')
+ggplot(meso2, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
+  scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  labs(title = paste0("Number of egg masses per week ",ttl)) +
+  xlab("Number of egg masses") +
+  ylab("Week") +
+  # theme_ridges(grid=F,center_axis_labels = T)
+  plot_it_gg(bg)
 
-stat_density_ridges(quantile_lines = TRUE, quantiles = 2)
+#### uninfected ####
+ggplot(meso2_UU, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+  geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
+  scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  labs(title = paste0("Number of egg masses per week ",ttl)) +
+  xlab("Number of egg masses") +
+  ylab("Week") +
+  # theme_ridges(grid=F,center_axis_labels = T)
+  plot_it_gg(bg)
 
-# create df of eggs, week, and egg density 
-denn <- density(meso2$Eggs)
-den_list <- list()
-for(i in meso2$Week){
-  #subset meso2 by weeks
-  
-  # then get density for each week
-  den <- density(meso2$Eggs)
-  den_list[i] <- den
-}
-str(den_list)
+#### infected ####
+ggplot(meso2_II, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+  geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
+  scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  labs(title = paste0("Number of egg masses per week ",ttl)) +
+  xlab("Number of egg masses") +
+  ylab("Week") +
+  # theme_ridges(grid=F,center_axis_labels = T)
+  plot_it_gg(bg)
+
+ggplot(meso2_UU, aes(x = Eggs, y = as.factor(Size), fill=..x..)) + # geom_density_ridges()
+  geom_density_ridges(aes(x = Eggs, fill = as.factor(Size)), 
+                      alpha = 0.5, color = "gray",size=0.25, from = 0, to = 100) +
+  labs(title = paste0("Number of egg masses per size class ",ttl)) +
+  xlab("Number of egg masses") +
+  ylab("Size class") +
+  # theme_ridges(grid=F,center_axis_labels = T)
+  plot_it_gg(bg)
 
 
-#example data
-d <- data.frame(x = rep(1:5, 3), y = c(rep(0, 5), rep(1, 5), rep(2, 5)),
-                height = c(0, 1, 3, 4, 0, 1, 2, 3, 5, 4, 0, 5, 4, 4, 1))
+
+
+
+
+
 
 ###########################################################################################
 
@@ -683,4 +727,18 @@ with(meso2,stripchart(Peri_F~NP,
                       main=paste0("Periphyton concentration for high and low N/P \n levels over ",max(meso1$Week)," weeks")
 ))
 abline(h=mean(meso2$Eggs),col="pink",lty=3)
+
+# hex and geombin for diameter vs cercariae 
+ggplot(meso1,aes(Diameter,Cercariae))+
+  geom_hex(color="white",size=0.5,alpha=0.5) +
+  # geom_bin2d(stat = "bin2d",color=col,alpha=0.5, size=0.5,linetype=1) +
+  scale_fill_gradientn(limits=c(0,1000), breaks=seq(0,1000, by=500), colours=magma(200)) +
+  # theme_ridges(grid=F,center_axis_labels = T) +
+  plot_it_gg(bg)
+
+#### single color palette with alpha ####
+ggplot(meso2_II, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+  geom_joy(data=d, scale = 3, size = 0.25, rel_min_height = 0.01, fill="pink", alpha=0.5) +
+  labs(title = paste0("Number of eggs masses per week ",ttl)) +xlab("Number of egg masses") +ylab("Week") +theme_ridges(grid=F,center_axis_labels = T)
+
 
