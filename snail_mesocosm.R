@@ -33,8 +33,7 @@
 # created plotting function
 
 # to do
-# plot overall and un/infected plots as stacked plots in one plot view 
-    # layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE))
+# provide plot options for diameter and mass without outlier 
 # Try population Pyramid plot for infected v uninfected /Users/malishev/Documents/Melbourne Uni/Programs/R code
 # correlation coefficients between body mass (tissue) and cerc produced, periphyton consumed, diameter      
 # turn main() function into PDF markdown output
@@ -125,42 +124,49 @@ col2 <- "orange"
 ##############################################################################
 
 ## Snail diameter (mm) distribution
-buffer <- 0.25
 den <- density(meso1$Diameter)
-xlim <- max(den$x);xlim; ylim <- max(den$y);ylim
+xlim <- round_any(max(den$x),10,ceiling);xlim; ylim <- round_any(max(den$y),0.1,ceiling);ylim
 plot(den,
      col=adjustcolor(col,alpha=0.5),
-     xlim=c(0,xlim+(xlim*buffer)),
-     ylim=c(0,ylim+(ylim*buffer)),
+     xlim=c(0,xlim),
+     ylim=c(0,ylim),
      xlab="Diameter (mm)",
      ylab="Density",
      main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks"))
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
 abline(v=mean(meso1$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
 
-### un/infected diameter ###
+### un/infected diameter 
+#### Uninfected
 den <- density(meso1_UU$Diameter)
-xlim <- max(den$x);xlim; ylim <- max(den$y);ylim
 plot(den,
      col=adjustcolor(col,alpha=0.5),
-     xlim=c(0,xlim+(xlim*buffer)),
-     ylim=c(0,ylim+(ylim*buffer)),
+     xlim=c(0,xlim),
+     ylim=c(0,ylim),
      xlab="Diameter (mm)",
      ylab="Density",
      main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks"))
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
 abline(v=mean(meso1_UU$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
 par(new=T)
-den2 <- density(meso1_II$Diameter) # infected
+#### Infected 
+den2 <- density(meso1_II$Diameter) 
 plot(den2,
      col=adjustcolor(col2,alpha=0.5),
-     xlim=c(0,xlim+(xlim*buffer)),
-     ylim=c(0,ylim+(ylim*buffer)),
+     xlim=c(0,xlim),
+     ylim=c(0,ylim),
      xlab="",
      ylab="",
      main="")
 polygon(den2, col=adjustcolor(col2,alpha=0.5),border=col2) # fill AUC 
 abline(v=mean(meso1_II$Diameter),col=col2,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+par(family="mono")
+legend("right",legend=c("Uninfected","Infected"),col=c(col,col2),
+       bty="n",pch=20,pt.cex=1.5,cex=0.7,y.intersp = 0.5, xjust = 0.5,
+       title="",title.adj = 0.3,
+       # text.font=2,
+       trace=T,inset=0.1)
+
 
 ### Snail size over time (weeks)
 # Shell diameter (mm) over time (weeks)
@@ -210,13 +216,15 @@ gradient <- 1 # plot with color gradient?
 ggplot(subset(meso1,Diameter<max(Diameter)), aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
   # scale = overlap
   geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
-  geom_density_ridges(scale = 4, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
+  # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
+  geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
+  geom_point(aes(x=30,y=c(3)),shape=21) +
   scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
-  labs(title = "Snail diameter (mm) per week") +
+  labs(title = paste0("Snail diameter over ",max(meso1$Week)," weeks")) +
   xlab("Snail diameter (mm)") +
   ylab("Week") +
   # theme_ridges(grid=F,center_axis_labels = T)
-  plot_it_gg(bg)
+  plot_it_gg("blue")   
 
 ### Body mass (mg) over time (weeks) (Soft tissue dry mass in mg = 0.0096 * Diameter[in mm]^3)
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
