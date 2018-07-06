@@ -1,6 +1,9 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+#5-7-18
+# fixed legends
+
 #28-6-18
 # plot_it_gg() function for ggplot global params
 # ggridges for egg masses per week/tank
@@ -281,27 +284,27 @@ with(meso1,t.test(Diameter,Tank)) # t.test
 
 ### Snail size and number of cercariae produced
 # Point size by cercariae number
-with(meso1,plot(Diameter,Cercariae,pch=20,
+with(meso1,plot(Diameter,log(Cercariae),pch=20,
                 col=adjustcolor(col,alpha=0.5),
-                cex=cex_cer,
-                ylab="Number of cercariae released over 90 mins",xlab="Diameter (mm)"
+                cex=cex_cer+0.5,
+                ylab="Number of cercariae released over 90 mins",xlab=" Diameter (mm)"
                 ))
 title("Number of cercarie for each snail length (mm)")
 abline(v=mean(meso1$Diameter),lty=3,col=col)# mean diameter
-outer <- meso1[which(meso1$Mass==max(meso1$Mass)),][,c("Diameter","Cercariae")] # identify outlier 
+outer <- meso1[which(meso1$Diameter==max(meso1$Diameter)),][,c("Diameter","Cercariae")]; outer # identify outlier 
 points(outer,col="red",pch=20) # plot outlier
 
 ### Snail mass and cercariae produced (mg)
-with(meso1,plot(Mass,Cercariae,pch=20,
+with(meso1,plot(log(Mass),Cercariae,pch=20,
                 col=adjustcolor(col,alpha=0.5),
-                cex=cex_cer,
-                ylab="Number of cercariae released over 90 mins",xlab="Dry body mass (mg)",
+                cex=cex_cer+0.5,
+                # cex=1.5,
+                ylab="Number of cercariae released over 90 mins",xlab="Log dry body mass (mg)",
 ))
-title("Number of cercariae for each snail mass (mg)")
-abline(v=mean(meso1$Mass),lty=3,col=col)# mean diameter
+title("Number of cercariae for each log snail mass (mg)")
+abline(v=log(mean(meso1$Mass)),lty=3,col=col)# mean diameter
 outer <- meso1[which(meso1$Mass==max(meso1$Mass)),][,c("Mass","Cercariae")] # identify outlier 
 points(outer,col="red",pch=20) # plot outlier      
-
 
 ### Snail size per tank
 # Shell diameter (mm) 
