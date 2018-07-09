@@ -51,7 +51,7 @@ lapply(packages,library,character.only=T)
 wd <- dlgInput("Set working directory", "Your working dir (without quotation marks")$res # set working dir      
 setwd(paste0(wd,"/")); list.files() # setwd and list files
 f <- "meso1.csv"
-f2 <- "meso2.csv"
+f2 <- "meso2.csv" 
 
 #### load data
 meso1 <- read.table(f,header=T,sep=",", row.names=NULL,stringsAsFactors=FALSE, strip.white=TRUE) # read data
