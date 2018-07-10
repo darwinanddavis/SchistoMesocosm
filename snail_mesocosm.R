@@ -1,6 +1,9 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+#10-7-18
+# fixed package installation for Rmd file using cache
+
 #5-7-18
 # fixed legends
 
@@ -42,8 +45,11 @@
 # turn main() function into PDF markdown output
 
 ##### install dependencies
-packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2","ggridges","ggjoy","ggthemes","svDialogs","data.table","tibble","extrafont")   
-install.packages(packages,dependencies = T)
+packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2","ggridges","ggjoy","ggthemes","svDialogs","data.table","tibble","extrafont","sp")   
+if (require(packages)) {
+  install.packages(packages,dependencies = T)
+  require(packages)
+}
 lapply(packages,library,character.only=T)
 
 ##### get data
