@@ -180,7 +180,6 @@ legend("right",legend=c("Uninfected","Infected"),col=c(col,col2),
        # text.font=2,
        trace=T,inset=0.1)
 
-
 ### Snail size over time (weeks)
 # Shell diameter (mm) over time (weeks)
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
@@ -787,7 +786,17 @@ ggplot(meso2_UU, aes(x = Eggs, y = as.factor(Size), fill=..x..)) + # geom_densit
   plot_it_gg("blue")
 
 
+# legends
 
+par(family="mono") # legend
+legend <- c(round_any(max(meso1$Cercariae),100,floor),round_any(max(meso1$Cercariae),100,floor)/2,round_any(min(meso1$Cercariae),100,floor));legend
+legend("right",legend=c("6000+", "1000-3000","<1000"),col=col,
+       bty="n",pch=20,
+       pt.cex=legend/1000+0.5,
+       y.intersp = 0.5, xjust = 0.5,
+       title="No. of cercariae",title.adj = 0.3,
+       # text.font=2,
+       trace=T,inset=0.3)
 
 
 
