@@ -1,6 +1,10 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+# 17-7-18
+# changed package installation for Rmd 
+# chars to numeric for t.test 
+
 #10-7-18
 # fixed package installation for Rmd file using cache
 
@@ -88,7 +92,7 @@ plot_it <- function(manuscript,bg,cp,alpha,family){ # plotting function (plot fo
   if(manuscript==0){
     if(bg=="black"){
       colvec<-magma(200,1)
-      par(bg = colvec[1],col.axis="white",col.lab="white",col.main="white",fg="white",bty="n",las=1,mar=c(5,6,4,2),family=family) #mono
+      par(bg = colvec[1],col.axis="white",col.lab="white",col.main="white",fg="white",bty="n",las=1,mar=c(5,6,4,2),family=family) #mono         
       border=adjustcolor("purple",alpha=0.5)
     }else{
       colvec<-bpy.colors(200)
@@ -143,7 +147,7 @@ plot(den,
      ylab="Density",
      main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks"))
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
-abline(v=mean(meso1$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+abline(v=mean(meso1$Diameter),col=col,lty=3,ylim=c(0,ylim)) # get mean
 
 ### un/infected diameter 
 #### Uninfected
@@ -156,7 +160,7 @@ plot(den,
      ylab="Density",
      main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks"))
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
-abline(v=mean(meso1_UU$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+abline(v=mean(meso1_UU$Diameter),col=col,lty=3,ylim=c(0,ylim)) # get mean
 par(new=T)
 #### Infected 
 den2 <- density(meso1_II$Diameter) 
@@ -168,7 +172,7 @@ plot(den2,
      ylab="",
      main="")
 polygon(den2, col=adjustcolor(col2,alpha=0.5),border=col2) # fill AUC 
-abline(v=mean(meso1_II$Diameter),col=col2,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+abline(v=mean(meso1_II$Diameter),col=col2,lty=3,ylim=c(0,ylim)) # get mean
 par(family="mono")
 legend("right",legend=c("Uninfected","Infected"),col=c(col,col2),
        bty="n",pch=20,pt.cex=1.5,cex=0.7,y.intersp = 0.5, xjust = 0.5,
@@ -225,9 +229,9 @@ gradient <- 1 # plot with color gradient?
 ggplot(subset(meso1,Diameter<max(Diameter)), aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
   # scale = overlap
   geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
-  # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
   geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
   geom_point(aes(x=30,y=c(3)),shape=21) +
+  # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
   scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
   labs(title = paste0("Snail diameter over ",max(meso1$Week)," weeks")) +
   xlab("Snail diameter (mm)") +
@@ -293,7 +297,7 @@ with(meso1,t.test(Diameter,Tank)) # t.test
 with(meso1,plot(Diameter,log(Cercariae),pch=20,
                 col=adjustcolor(col,alpha=0.5),
                 cex=cex_cer+0.5,
-                ylab="Number of cercariae released over 90 mins",xlab=" Diameter (mm)"
+                ylab="Log number of cercariae released over 90 mins",xlab=" Diameter (mm)"
                 ))
 title("Number of cercarie for each snail length (mm)")
 abline(v=mean(meso1$Diameter),lty=3,col=col)# mean diameter
@@ -315,7 +319,6 @@ points(outer,col="red",pch=20) # plot outlier
 ### Snail size per tank
 # Shell diameter (mm) 
 # _______________________________________________ compare un/infected snails 
-# @@@ joyplot
 layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE)) # plot stacked plots
 
 tank <- 2 # select tank #. max 48
@@ -331,7 +334,7 @@ plot(den,
      xlab="",ylab="",main=""
 )
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
-abline(v=mean(snail$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+abline(v=mean(snail$Diameter),col=col,lty=3,ylim=c(0,ylim)) # get mean
 title(main=paste0("Shell diameter (mm) distribution for tank #",tank),
       xlab="Shell diameter (mm)")
 title(ylab="Density",line=3.5)
@@ -347,7 +350,7 @@ plot(den,
      xlab="",ylab="",main=""
 )
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
-abline(v=mean(snail_UU$Diameter),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+abline(v=mean(snail_UU$Diameter),col=col,lty=3,ylim=c(0,ylim)) # get mean
 title(main=paste0("Uninfected snails in tank #",tank),
       xlab="Shell diameter (mm)")
 title(ylab="Density",line=3.5)
@@ -362,40 +365,57 @@ if(length(snail_II$Tank)>0){
        xlab="",ylab="",main=""
   )
   polygon(den2, col=adjustcolor(col2,alpha=0.5),border=col2) # fill AUC 
-  abline(v=mean(snail_II$Diameter),col=col2,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+  abline(v=mean(snail_II$Diameter),col=col2,lty=3,ylim=c(0,ylim)) # get mean
   title(main=paste0("Infected snails in tank #",tank),
         xlab="Shell diameter (mm)")
   }else{
     plot(0,0,type="n");title(main=paste0("Infected snails in tank #",tank)); text(0,0.5,paste0("No cercariae \nin tank #",tank))
   }
 
-### Individual cercariae production over time
+### Cercariae production over time
 # Cercariae shed over 90 mins per week
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
-tank <- 21 # max 48 
-cer_total <- 0 # set ylim either to max for tank or max across all tanks (6100) 
-
-snail <- subset(meso1,subset=Tank==tank) # get tank level indiviudals
-snail <- subset(snail,subset=Cercariae>0) # get only cercariae
-buffer <- 0.25 # axis buffer
+## Snail abundance over time (weeks)
 xlim <- max(meso1$Week) # uses total num of weeks
-ifelse(cer_total==1,ylim <- round_any(max(meso1$Cercariae),100),ylim <- max(snail$Cercariae))
+ylim <- round_any(max(meso1$Cercariae),100,ceiling);ylim
+with(meso1,plot(Cercariae~Week,
+                col=adjustcolor(col,alpha=0.5),
+                type="h",
+                lwd=5,
+                xlim=c(0,xlim),ylim=c(0,ylim),
+                xlab="",ylab="",main=""
+))
+abline(h=mean(meso1$Cercariae),col=col,lty=3,ylim=c(0,ylim)) # get mean
+title(main=paste0("Cercariae production over ",max(meso1$Week)," weeks"),
+      xlab="Week")
+title(ylab="Number of cercariae shed in 90 mins",line=3.5)
+
+### Tank cercariae production over time per tank
+tank <- 9 # max 48 
+cer_total <- 0 # set ylim either to max for tank (1) or max across all tanks (6100) 
+
+snail <- subset(meso1,subset=Tank==tank) # get tank level individuals
+snail <- subset(snail,subset=Cercariae>0) # get only cercariae
+xlim <- max(meso1$Week) # uses total num of weeks
+ylim <- round_any(max(snail$Cercariae),100,ceiling);ylim
+ifelse(cer_total==1,ylim <- round_any(max(meso1$Cercariae),100,ceiling),ylim <- round_any(max(snail$Cercariae),100,ceiling))
 par(mfrow=c(1,1))
 if(length(snail$Cercariae)>0){
   with(snail,plot(Cercariae~Week,
                   col=adjustcolor(col,alpha=0.5),
                   type="h",
                   lwd=5,
-                  xlim=c(0,xlim),ylim=c(0,ylim+(ylim*buffer)),
+                  xlim=c(0,xlim),ylim=c(0,ylim),
                   xlab="",ylab="",main=""
   ))
-  abline(h=mean(snail$Cercariae),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+  abline(h=mean(snail$Cercariae),col=col,lty=3,ylim=c(0,ylim)) # get mean
   title(main=paste0("Cercariae production for tank ",tank," over ",max(meso1$Week)," weeks"),
         xlab="Week")
   title(ylab="Number of cercariae shed in 90 mins",line=3.5)
   par(new=T)
   points(x=c(0,2,4,6),y=rep(max(snail$Cercariae)/3,4),pch="~",cex=1.5,col="red")# add inoculation points
 }else{print(paste0("No cercariae in tank #",tank))}
+
 
 ############################################################################################################
 ############################################################################################################
@@ -442,7 +462,7 @@ plot(den,
      ylab="Density",
      main=paste0("Distribution of number of egg masses over ",max(meso1$Week)," weeks"))
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
-abline(v=mean(meso2$Eggs),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+abline(v=mean(meso2$Eggs),col=col,lty=3,ylim=c(0,ylim)) # get mean
 
 ### N/P concentration v egg mass
 # _______________________________________________ compare un/infected snails 
@@ -491,6 +511,7 @@ with(eggs_II,stripchart(Eggs~NP,
 abline(h=mean(eggs_II$Eggs),col=col2,lty=3)
 title(main=paste0("Infected snails"),
       xlab="N/P level")
+with(eggs_UU,t.test(Eggs,as.integer(as.factor(NP))))
 
 ### phyto = flourescence units
 ### peri = flourescence per 2 weeks / 3.5 inch^2 tile (gross productivity biomass rate)
@@ -507,7 +528,7 @@ plot(den,
      xlab="",ylab="",main=""
 ) 
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
-abline(v=mean(meso2$Phyto_F),col=col,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+abline(v=mean(meso2$Phyto_F),col=col,lty=3,ylim=c(0,ylim)) # get mean
 par(new=T) # add periphyton concentration
 den2 <- density(meso2$Peri_F)
 plot(den2,
@@ -517,7 +538,7 @@ plot(den2,
      xlab="",ylab="",main=""
      )
 polygon(den2, col=adjustcolor(col2,alpha=0.5),border=col2) # fill AUC 
-abline(v=mean(meso2$Peri_F),col=col2,lty=3,ylim=c(0,ylim+(ylim*buffer))) # get mean
+abline(v=mean(meso2$Peri_F),col=col2,lty=3,ylim=c(0,ylim)) # get mean
 title(main=paste0("Resource concentration over ",max(meso1$Week)," weeks"),
       xlab="Resource concentration")
 title(ylab="Density",line=3.5)
@@ -525,7 +546,7 @@ legend("topright",legend=c("Phytoplankton","Periphyton"),title="Resource type",
        border="white",pch=19,ncol=1,bty="n",
        cex=0.75,
        xjust=0.5,yjust=0.5,x.intersp = 0.5,y.intersp = 0.5,
-       col=c(col1,col2)
+       col=c(col,col2)
        )
 
 # egg mass over time v presence of schisto. inset phyto and pero conc as density polygon(?) 
@@ -645,48 +666,36 @@ meso2$Week <- as.factor(meso2$Week)
 d <- meso2
 
 ggplot(meso2, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
-geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
-  scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
-  labs(title = paste0("Number of egg masses per week ",ttl)) +
+  # geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
+  # scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  geom_density_ridges(scale = 3, size=0.2,color="black", rel_min_height = 0.01,fill=col,alpha=0.5) +
+  labs(title = paste0("Number of egg masses per week ")) +
   xlab("Number of egg masses") +
   ylab("Week") +
   # theme_ridges(grid=F,center_axis_labels = T)
-  plot_it_gg(bg)
+  plot_it_gg("blue")
 
 #### uninfected ####
 ggplot(meso2_UU, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
-  geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
-  scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
-  labs(title = paste0("Number of egg masses per week ",ttl)) +
+  # geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
+  # scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  geom_density_ridges(scale = 3, size=0.2,color="black", rel_min_height = 0.01,fill=col,alpha=0.5) +
+  labs(title = paste0("Number of egg masses per week for uninfected hosts")) +
   xlab("Number of egg masses") +
   ylab("Week") +
   # theme_ridges(grid=F,center_axis_labels = T)
-  plot_it_gg(bg)
+  plot_it_gg("blue")
 
 #### infected ####
 ggplot(meso2_II, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
-  geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
-  scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
-  labs(title = paste0("Number of egg masses per week ",ttl)) +
+  # geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
+  # scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  geom_density_ridges(scale = 3, size=0.2,color="black", rel_min_height = 0.01,fill=col2,alpha=0.5) +
+  labs(title = paste0("Number of egg masses per week for infected hosts")) +
   xlab("Number of egg masses") +
   ylab("Week") +
   # theme_ridges(grid=F,center_axis_labels = T)
-  plot_it_gg(bg)
-
-ggplot(meso2_UU, aes(x = Eggs, y = as.factor(Size), fill=..x..)) + # geom_density_ridges()
-  geom_density_ridges(aes(x = Eggs, fill = as.factor(Size)), 
-                      alpha = 0.5, color = "gray",size=0.25, from = 0, to = 100) +
-  labs(title = paste0("Number of egg masses per size class ",ttl)) +
-  xlab("Number of egg masses") +
-  ylab("Size class") +
-  # theme_ridges(grid=F,center_axis_labels = T)
-  plot_it_gg(bg)
-
-
-
-
-
-
+  plot_it_gg("blue")
 
 
 ###########################################################################################
@@ -751,11 +760,36 @@ ggplot(meso1,aes(Diameter,Cercariae))+
   # geom_bin2d(stat = "bin2d",color=col,alpha=0.5, size=0.5,linetype=1) +
   scale_fill_gradientn(limits=c(0,1000), breaks=seq(0,1000, by=500), colours=magma(200)) +
   # theme_ridges(grid=F,center_axis_labels = T) +
-  plot_it_gg(bg)
+  plot_it_gg("blue")
 
 #### single color palette with alpha ####
 ggplot(meso2_II, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
   geom_joy(data=d, scale = 3, size = 0.25, rel_min_height = 0.01, fill="pink", alpha=0.5) +
-  labs(title = paste0("Number of eggs masses per week ",ttl)) +xlab("Number of egg masses") +ylab("Week") +theme_ridges(grid=F,center_axis_labels = T)
+  labs(title = paste0("Number of eggs masses per week ")) +xlab("Number of egg masses") +ylab("Week") +theme_ridges(grid=F,center_axis_labels = T)
+
+#### infected ####
+ggplot(meso2_II, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+  geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
+  scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  labs(title = paste0("Number of egg masses per week ")) +
+  xlab("Number of egg masses") +
+  ylab("Week") +
+  # theme_ridges(grid=F,center_axis_labels = T)
+  plot_it_gg("blue")
+
+ggplot(meso2_UU, aes(x = Eggs, y = as.factor(Size), fill=..x..)) + # geom_density_ridges()
+  geom_density_ridges(aes(x = Eggs, fill = as.factor(Size)), 
+                      alpha = 0.5, color = "gray",size=0.25, from = 0, to = 100) +
+  labs(title = paste0("Number of egg masses per size class ")) +
+  xlab("Number of egg masses") +
+  ylab("Size class") +
+  # theme_ridges(grid=F,center_axis_labels = T)
+  plot_it_gg("blue")
+
+
+
+
+
+
 
 

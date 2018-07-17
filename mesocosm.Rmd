@@ -41,6 +41,7 @@ vignette: >
   MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "all"} } });
 </script>
 
+
 ```{r echo = FALSE}
 # library(rmarkdown)
 # setwd("/Users/malishev/Documents/Emory/research/models/deb/host_parasite/")
@@ -54,9 +55,30 @@ knitr::opts_chunk$set(
 )
 ```
 
+
 ## Overview
 
 This document ...  
+
+### Install dependencies
+```{r, load packages, cache=T}
+packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2","ggridges","ggjoy","ggthemes","svDialogs","data.table","tibble","extrafont","sp")   
+if (require(packages)) {
+    install.packages(packages,dependencies = T)
+    require(packages)
+}
+lapply(packages,library,character.only=T)
+```
+
+### Get data
+```{r}
+wd <- "/Users/malishev/Documents/Emory/research/mesocosm"     
+setwd(paste0(wd,"/")); list.files() # setwd and list files
+f <- "meso1.csv"
+f2 <- "meso2.csv"
+```
+
+
 
 ```{r, fig.width = 18, fig.height = 13, echo = FALSE, warning = FALSE, message = FALSE, include=TRUE} 
 cat('\r\n\r\n')
