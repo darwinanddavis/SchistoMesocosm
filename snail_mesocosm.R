@@ -302,6 +302,7 @@ title("Number of cercarie for each snail length (mm)")
 abline(v=mean(meso1$Diameter),lty=3,col=col)# mean diameter
 outer <- meso1[which(meso1$Diameter==max(meso1$Diameter)),][,c("Diameter","Cercariae")]; outer # identify outlier 
 points(outer,col="red",pch=20) # plot outlier
+# summary(with(meso1,lm(log(Cercariae)~Diameter))) # linear log
 
 ### Snail mass and cercariae produced (mg)
 with(meso1,plot(log(Mass),Cercariae,pch=20,
@@ -375,6 +376,7 @@ if(length(snail_II$Tank)>0){
 # Cercariae shed over 90 mins per week
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 ## Snail abundance over time (weeks)
+par(mfrow=c(1,1))
 xlim <- max(meso1$Week) # uses total num of weeks
 ylim <- round_any(max(meso1$Cercariae),100,ceiling);ylim
 with(meso1,plot(Cercariae~Week,
@@ -755,7 +757,7 @@ abline(h=mean(meso2$Eggs),col="pink",lty=3)
 
 # hex and geombin for diameter vs cercariae 
 ggplot(meso1,aes(Diameter,Cercariae))+
-  geom_hex(color="white",size=0.5,alpha=0.5) +
+  geom_hex(color=magma(200)[length(meso1$Diameter)],size=0.5,alpha=0.5) +
   # geom_bin2d(stat = "bin2d",color=col,alpha=0.5, size=0.5,linetype=1) +
   scale_fill_gradientn(limits=c(0,1000), breaks=seq(0,1000, by=500), colours=magma(200)) +
   # theme_ridges(grid=F,center_axis_labels = T) +
@@ -797,8 +799,5 @@ legend("right",legend=c("6000+", "1000-3000","<1000"),col=col,
        title="No. of cercariae",title.adj = 0.3,
        # text.font=2,
        trace=T,inset=0.3)
-
-
-
 
 
