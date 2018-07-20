@@ -1,6 +1,9 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+# 19-7-18
+# begin summary stats
+
 # 17-7-18
 # changed package installation for Rmd 
 # chars to numeric for t.test 
@@ -67,6 +70,7 @@ f2 <- "meso2.csv"
 meso1 <- read.table(f,header=T,sep=",", row.names=NULL,stringsAsFactors=FALSE, strip.white=TRUE) # read data
 meso2 <- read.table(f2,header=T,sep=",",row.names=NULL,stringsAsFactors=FALSE, strip.white=TRUE) # read data
 colnames(meso2)[2] <- "NP" # fix col names
+meso2$Week <- as.numeric(meso2$Week)
 meso1[is.na(meso1)] <- 0 ; meso2[is.na(meso2)] <- 0 # remove NAs
 mass <- 0.0096*(meso1$Diameter^3) # add mass to df
 meso1$Mass <- mass  
@@ -127,16 +131,18 @@ print("1/0, set colour, set colour palette 'display.brewer.all()',set alpha for 
 plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
 plot_it_gg("blue") # same as above
 
+# set colors you want
+col <- "lightblue" 
+col2 <- "orange" 
+
 # get only infected snails
 meso1_II <- subset(meso1,subset=Cercariae>0);length(meso1_II$Tank)
 meso1_UU <- subset(meso1,subset=Cercariae==0);length(meso1_UU$Tank) 
 
-# set colors you want
-col <- "lightblue" 
-col2 <- "orange" 
-##############################################################################
 
-## Snail diameter (mm) distribution
+##############################################################################
+## Mesocosm 1 data  
+### Snail diameter (mm) distribution
 den <- density(meso1$Diameter)
 xlim <- round_any(max(den$x),10,ceiling);xlim; ylim <- round_any(max(den$y),0.1,ceiling);ylim
 plot(den,
@@ -149,8 +155,8 @@ plot(den,
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
 abline(v=mean(meso1$Diameter),col=col,lty=3,ylim=c(0,ylim)) # get mean
 
-### un/infected diameter 
-#### Uninfected
+## un/infected diameter 
+# Uninfected
 den <- density(meso1_UU$Diameter)
 plot(den,
      col=adjustcolor(col,alpha=0.5),
@@ -162,7 +168,7 @@ plot(den,
 polygon(den, col=adjustcolor(col,alpha=0.5),border=col) # fill AUC 
 abline(v=mean(meso1_UU$Diameter),col=col,lty=3,ylim=c(0,ylim)) # get mean
 par(new=T)
-#### Infected 
+# Infected 
 den2 <- density(meso1_II$Diameter) 
 plot(den2,
      col=adjustcolor(col2,alpha=0.5),
@@ -223,23 +229,10 @@ abline(h=mean(meso1_II$Diameter),col=col,lty=3)
 par(new=T)
 points(x=c(1,3),y=rep(ylim/2,2),pch="~",col="red")# add inoculation points
 
-gradient <- 1 # plot with color gradient?
-### Diameter per week (minus outlier)
-ggplot(subset(meso1,Diameter<max(Diameter)), aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
-  # scale = overlap
-  geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
-  geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
-  geom_point(aes(x=30,y=c(3)),shape=21) +
-  # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
-  scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
-  labs(title = paste0("Snail diameter over ",max(meso1$Week)," weeks")) +
-  xlab("Snail diameter (mm)") +
-  ylab("Week") +
-  # theme_ridges(grid=F,center_axis_labels = T)
-  plot_it_gg("blue")   
-
-### Body mass (mg) over time (weeks) (Soft tissue dry mass in mg = 0.0096 * Diameter[in mm]^3)
+### Body mass (mg) over time (weeks) 
+# Soft tissue dry mass in mg = 0.0096 * Diameter[in mm]^3)
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
+layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE)) # plot stacked plots
 ylim <- round_any(max(meso1$Mass),100,ceiling);ylim
 boxplot(Mass~Week, data=meso1,
         # xlim=c(0,max(meso1$Week)),
@@ -302,6 +295,7 @@ title("Number of cercarie for each snail length (mm)")
 abline(v=mean(meso1$Diameter),lty=3,col=col)# mean diameter
 outer <- meso1[which(meso1$Diameter==max(meso1$Diameter)),][,c("Diameter","Cercariae")]; outer # identify outlier 
 points(outer,col="red",pch=20) # plot outlier
+# Linear log
 # summary(with(meso1,lm(log(Cercariae)~Diameter))) # linear log
 
 ### Snail mass and cercariae produced (mg)
@@ -319,10 +313,10 @@ points(outer,col="red",pch=20) # plot outlier
 ### Snail size per tank
 # Shell diameter (mm) 
 # _______________________________________________ compare un/infected snails 
+# Select tank #. max 48
+tank <- 2 
+
 layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE)) # plot stacked plots
-
-tank <- 2 # select tank #. max 48
-
 snail <- subset(meso1,subset=Tank==tank) # get tank level indiviudals
 diam_total <- 1 # set ylim either to max for tank or max across all tanks (16.8) 
 den <- density(snail$Diameter) # get diameter density
@@ -393,8 +387,8 @@ title(ylab="Number of cercariae shed in 90 mins",line=3.5)
 
 ### Tank cercariae production over time per tank
 tank <- 9 # max 48 
-cer_total <- 0 # set ylim either to max for tank (1) or max across all tanks (6100) 
 
+cer_total <- 0 # set ylim either to max for tank (1) or max across all tanks (6100) 
 snail <- subset(meso1,subset=Tank==tank) # get tank level individuals
 snail <- subset(snail,subset=Cercariae>0) # get only cercariae
 xlim <- max(meso1$Week) # uses total num of weeks
@@ -417,12 +411,13 @@ if(length(snail$Cercariae)>0){
   points(x=c(0,2,4,6),y=rep(max(snail$Cercariae)/3,4),pch="~",cex=1.5,col="red")# add inoculation points
 }else{print(paste0("No cercariae in tank #",tank))}
 
-
+#####   
 ############################################################################################################
 ############################################################################################################
 ############################################################################################################
 
-# Mesocosm 2 data sheet
+# Mesocosm 2 data sheet  
+
 meso2$Schisto <- as.integer(as.factor(meso2$Schisto))-1# convert Y/N in Schisto col to 1/0
 # convert size to integers
 meso2$Size <- gsub("Intermediate","2Intermediate",meso2$Size)  
@@ -449,9 +444,8 @@ large <- subset(meso2,Size==3) #large
 high <- subset(meso2,NP=="High") # high NP conc
 low <- subset(meso2,NP=="Low") # low NP conc
 
-## Egg mass distribution
+### Egg mass distribution
 # _______________________________________________ compare un/infected snails 
-
 den <- density(meso2$Eggs[meso2$Eggs>0]) # get only snails with eggs
 xlim <- round_any(max(den$x),50,ceiling);xlim
 ylim <- round_any(max(den$y),0.01,ceiling);ylim
@@ -514,10 +508,9 @@ title(main=paste0("Infected snails"),
       xlab="N/P level")
 with(eggs_UU,t.test(Eggs,as.integer(as.factor(NP))))
 
+### phyto and peri distribution 
 ### phyto = flourescence units
 ### peri = flourescence per 2 weeks / 3.5 inch^2 tile (gross productivity biomass rate)
-
-### phyto and peri distribution 
 par(mfrow=c(1,1))
 den <- density(meso2$Phyto_F)
 xlim <- round_any(max(den$x),10000,ceiling);xlim
@@ -550,7 +543,7 @@ legend("topright",legend=c("Phytoplankton","Periphyton"),title="Resource type",
        col=c(col,col2)
        )
 
-# egg mass over time v presence of schisto. inset phyto and pero conc as density polygon(?) 
+### Egg mass over time v presence of schisto. 
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
 layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE)) # plot stacked plots
@@ -605,7 +598,7 @@ par(new=T)
 points(x=c(0,2,4,6),y=rep(max(ylim)/3,4),pch="~",cex=1,col="red")# add inoculation points
 axis(1,at=c(0,xlim),labels=c("0","16"))# bookending axis tick marks
 
-# size class vs peri
+### Size class vs peri
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
 
@@ -657,10 +650,9 @@ small_II <- subset(small,Schisto==1)
 int_II <- subset(int,Schisto==1)
 large_II <- subset(large,Schisto==1)
 
-### joyplot of egg mass per week 
+### Egg mass per week 
 ### ~1000 eggs inoculated at 0,2,4,6 weeks
 # _______________________________________________ compare un/infected snails 
-
 # set data to appropriate class
 meso2$Eggs <- as.numeric(meso2$Eggs)
 meso2$Week <- as.factor(meso2$Week)
@@ -754,6 +746,21 @@ with(meso2,stripchart(Peri_F~NP,
                       main=paste0("Periphyton concentration for high and low N/P \n levels over ",max(meso1$Week)," weeks")
 ))
 abline(h=mean(meso2$Eggs),col="pink",lty=3)
+
+### Diameter per week (minus outlier)
+gradient <- 1 # plot with color gradient?
+ggplot(subset(meso1,Diameter<max(Diameter)), aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+  # scale = overlap
+  geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+  geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
+  geom_point(aes(x=30,y=c(3)),shape=21) +
+  # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
+  scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  labs(title = paste0("Snail diameter over ",max(meso1$Week)," weeks")) +
+  xlab("Snail diameter (mm)") +
+  ylab("Week") +
+  # theme_ridges(grid=F,center_axis_labels = T)
+  plot_it_gg("blue")   
 
 # hex and geombin for diameter vs cercariae 
 ggplot(meso1,aes(Diameter,Cercariae))+
