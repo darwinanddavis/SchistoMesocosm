@@ -60,6 +60,8 @@ Date: `r params$date`
 R version: `r params$version`   
 Corresponding author: `r params$email`
 
+#### How much of the population does the sampling effort capture? 
+
 ## Overview  
 
 This document uses the schisto mesocosm 2016 data to explore cercariae production from snail hosts of different body sizes (diameter in mm and mass in mg) over a 14 week period under high and low N/P nutrient conditions. Host reproduction (egg masses) is also calculated.    
@@ -71,9 +73,12 @@ This document uses the schisto mesocosm 2016 data to explore cercariae productio
 
 ```{r, load packages, include=F, cache=F, message=F}
 
-packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2","ggridges","ggjoy","ggthemes","svDialogs","data.table","tibble","extrafont","sp")   
+packages <- c("rgdal","dplyr","zoo","RColorBrewer","viridis","plyr","digitize","jpeg","devtools","imager","dplyr","ggplot2","ggridges","ggjoy","ggthemes","svDialogs","data.table","tibble","extrafont","sp","gridExtra")   
 
 if (require(packages)) {
+  # install ggtech package from github for ggplot themes
+  devtools::install_github("ricardo-bion/ggtech", 
+                          dependencies=TRUE)
 
     install.packages(packages,dependencies = T)
 
@@ -82,7 +87,7 @@ if (require(packages)) {
 }
 
 lapply(packages,library,character.only=T)
-
+library(ggtech)
 ```
 
 
@@ -153,20 +158,14 @@ plot_it <- function(manuscript,bg,cp,alpha,family){ # plotting function (plot fo
 
 # Setting ggplot theme graphics
 plot_it_gg <- function(bg){ # bg = colour to plot bg, family = font family
-  if(bg=="black"){
-    colvec<-magma(200,1)
-    bg <- colvec[1]
-  }
   if(bg=="white"){
     bg <- "white"
-    }else{
-    colvec<-bpy.colors(200)
-    bg = colvec[1]
-  }
+    fg <- "black"
   theme_tufte(base_family = "HersheySans") +
     theme(panel.border = element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_rect(fill = bg,colour = bg),plot.background = element_rect(fill=bg)) +
-    theme(axis.line = element_line(color = "white")) +theme(axis.ticks = element_line(color = "white")) +theme(plot.title = element_text(colour = "white")) +theme(axis.title.x = element_text(colour = "white"), axis.title.y = element_text(colour = "white")) +theme(axis.text.x = element_text(color = "white"),axis.text.y = element_text(color = "white")) +theme(legend.key = element_rect(fill = bg)) + theme(legend.title = element_text(colour="white")) + theme(legend.text = element_text(colour="white")) 
-  }
+    theme(axis.line = element_line(color = fg)) +theme(axis.ticks = element_line(color = fg)) + theme(plot.title = element_text(colour = fg)) +theme(axis.title.x = element_text(colour = fg), axis.title.y = element_text(colour = fg)) + theme(axis.text.x = element_text(color = fg),axis.text.y = element_text(color = fg)) + theme(legend.key = element_rect(fill = bg)) + theme(legend.title = element_text(colour=fg)) + theme(legend.text = element_text(colour=fg))
+}
+  }# end gg
 ```
 
 Set plotting parameters  
@@ -174,14 +173,13 @@ Set plotting parameters
 ```{r, cache = TRUE, tidy = TRUE, lazy=TRUE, results="hide"}
 print("1/0, set colour, set colour palette 'display.brewer.all()',set alpha for col,set font")
 plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
-plot_it_gg("blue") # same as above
+plot_it_gg("white") # same as above
 
 # set colors you want
 col <- "lightblue" 
 col2 <- "orange" 
 
 ```
-  
   
 Get only infected snails  
 ```{r}
@@ -190,10 +188,29 @@ meso1_II <- subset(meso1,subset=Cercariae>0)
 meso1_UU <- subset(meso1,subset=Cercariae==0)
 ```
 
-#####
+---
+\  
+
 ##############################################################################
 ## Mesocosm1 data sheet
 
+### Snail size per tank   
+Shell diameter (mm) per tank    
+```{r}
+par(bty="n", las = 1)
+#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
+par(mfrow=c(1,1))
+ylim <- round_any(max(meso1$Diameter),10,ceiling)
+boxplot(Diameter~Tank, data=meso1,
+        ylim=c(0,ylim),
+        col = "light blue",
+        notch = T,xlab="Tank",ylab="Diameter (mm)",
+        main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks")
+)
+abline(h=mean(meso1$Diameter),col="pink",lty=3)
+with(meso1,t.test(Diameter,Tank)) # t.test
+
+```
 
 ### Snail diameter (mm) distribution
 ```{r}
@@ -241,7 +258,6 @@ legend("right",legend=c("Uninfected","Infected"),col=c(col,col2),
        title="",title.adj = 0.3,
        # text.font=2,
        trace=T,inset=0.1)
-
 ```
 
 ### Snail size over time (weeks)
@@ -291,11 +307,78 @@ points(x=c(1,3),y=rep(ylim/2,2),pch="~",col="red")# add inoculation points
 
 ```
 
+### Snail size over time (weeks) per tank  
+
+#### Snail size density over time for all tanks (total = 48) have been saved as 'Size_per_tank_over_time.pdf' in `r params$dir`  
+\n
+~1000 eggs inoculated at 0,2,4,6 weeks
+```{r}
+
+#### size dist per tank over time ('Snail size over time (weeks)' but for each tank)
+# Plot Tanks with large nutrients at the beginning versus tanks with lower nutrients
+# Pick high and low nutrient tanks to compare
+
+# Focus on diameter rather than biomass
+
+# Eight replicates per size class and NP combo: six received schisto, two didn't. (Replication factor)
+```
+
+```{r echo = T}
+# Select tank #. Max 48   
+tank <- 45
+```
+
+```{r}
+par(bty="n", las = 1)
+#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
+layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE)) # plot stacked plots
+snail <- subset(meso1,subset=Tank==tank) # get tank level indiviudals
+
+ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+  # scale = overlap
+  geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+  geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
+  # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
+  scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+  xlim(c(0,25)) +
+  labs(title = paste0("Snail diameter over ",max(meso1$Week)," weeks for tank ",tank)) +
+  xlab("Snail diameter (mm)") +
+  ylab("Week") +
+  plot_it_gg("white")
+
+```
+
+
+```{r echo = F, results = "hide"}
+# save plots for each tank to drive
+tanks <- unique(meso1$Tank)
+
+pdf("Size_per_tank_over_time.pdf",onefile = T)
+# for (i in list(unique(meso1$Tank)[1:2])){
+for(i in 1:length(tanks)){ 
+par(bty="n", las = 1)
+  snail <- subset(meso1,subset=Tank==i) # get tank level individuals
+  grid.arrange( 
+  ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+    # scale = overlap
+    geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
+    # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
+    scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    xlim(c(0,25)) +
+    labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i)) +
+    xlab("Snail diameter (mm)") +
+    ylab("Week") +
+    plot_it_gg("white")
+  )
+}  
+dev.off()
+
+```
 
 ### Body mass (mg) over time (weeks)   
 (Soft tissue dry mass in mg = 0.0096 * Diameter[in mm]^3)   
 ~1000 eggs inoculated at 0,2,4,6 weeks   
-
 
 Outer   
 Outlier  
@@ -333,7 +416,7 @@ boxplot(Mass~Week, data=meso1_II,
         ylim=c(0,ylim),
         col = col2,
         notch = F,xlab="Week",ylab="Dry body mass (mg)",
-        main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks \n(uninfected)"),
+        main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks \n(infected)"),
         xaxs = "i", yaxs = "i"
 )
 abline(h=mean(meso1$Mass),col=col2,lty=3)
@@ -386,32 +469,13 @@ boxplot(Mass~Week, data=meso1_II,
         ylim=c(0,ylim),
         col = col2,
         notch = F,xlab="Week",ylab="Dry body mass (mg)",
-        main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks  \n(uninfected)"),
+        main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks  \n(infected)"),
         xaxs = "i", yaxs = "i"
 )
 abline(h=mean(meso1$Mass),col=col2,lty=3)
 points(x=c(1,3),y=rep(ylim/1.2,2),pch="~",col="red")# add inoculation points
 ```
 
-### Snail size per tank   
-
-Shell diameter (mm) per tank  
-
-```{r}
-par(bty="n", las = 1)
-#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
-par(mfrow=c(1,1))
-ylim <- round_any(max(meso1$Diameter),10,ceiling)
-boxplot(Diameter~Tank, data=meso1,
-        ylim=c(0,ylim),
-        col = "light blue",
-        notch = T,xlab="Tank",ylab="Diameter (mm)",
-        main=paste0("Shell diameter (mm) over ",max(meso1$Week)," weeks")
-)
-abline(h=mean(meso1$Diameter),col="pink",lty=3)
-with(meso1,t.test(Diameter,Tank)) # t.test
-
-```
 ### Snail size and number of cercariae produced  
 Point size by cercariae number  
 ```{r}
@@ -676,7 +740,6 @@ title(main=paste0("Infected snails"),
 
 ```
 
-
 ### Phyto and Peri Distribution    
 
 phyto = flourescence units    
@@ -851,9 +914,10 @@ ggplot(meso2, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_r
   xlab("Number of egg masses") +
   ylab("Week") +
   # theme_ridges(grid=F,center_axis_labels = T)
-  plot_it_gg("blue")
+  plot_it_gg("white")
 
 #### uninfected ####
+par(bty="n", las = 1)
 ggplot(meso2_UU, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
   # geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
   # scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
@@ -862,9 +926,10 @@ ggplot(meso2_UU, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_densit
   xlab("Number of egg masses") +
   ylab("Week") +
   # theme_ridges(grid=F,center_axis_labels = T)
-  plot_it_gg("blue")
+  plot_it_gg("white")
 
 #### infected ####
+par(bty="n", las = 1)
 ggplot(meso2_II, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
   # geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap
   # scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
@@ -873,7 +938,7 @@ ggplot(meso2_II, aes(x = Eggs, y = as.factor(Week), fill=..x..)) + # geom_densit
   xlab("Number of egg masses") +
   ylab("Week") +
   # theme_ridges(grid=F,center_axis_labels = T)
-  plot_it_gg("blue")
+  plot_it_gg("white")
 
 ```
 
