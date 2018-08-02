@@ -1,6 +1,9 @@
 ### schisto mesocosm ###
 ### NB: Date and Snail cols contain unnatural values ###
 
+# 28-7-18
+# analysis henceforth transferred to 'snail_mesocosm.Rmd' 
+
 # 19-7-18
 # begin summary stats
 

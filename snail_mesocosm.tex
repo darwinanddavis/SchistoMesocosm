@@ -1,0 +1,1219 @@
+\documentclass[10,portrait]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{
+            pdftitle={Mesocosm experiment plots},
+            colorlinks=true,
+            linkcolor=pink,
+            citecolor=red,
+            urlcolor=blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage[]{biblatex}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Mesocosm experiment plots}
+\author{Matthew Malishev\textsuperscript{1}*\\
+David Civitello \textsuperscript{1}\\
+\emph{\textsuperscript{1} Department of Biology, Emory University, 1510
+Clifton Road NE, Atlanta, GA, USA, 30322}}
+\date{}
+
+\begin{document}
+\maketitle
+
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+~
+
+Date: 2018-08-02\\
+R version: 3.5.0\\
+Corresponding author:
+\href{mailto:matthew.malishev@gmail.com}{\nolinkurl{matthew.malishev@gmail.com}}\\
+This document can be found at
+\url{https://github.com/darwinanddavis/UsefulCode}
+
+\newpage  
+
+\paragraph{TO DO}\label{to-do}
+
+\paragraph{How much of the population does the sampling effort
+capture?}\label{how-much-of-the-population-does-the-sampling-effort-capture}
+
+\subsection{Overview}\label{overview}
+
+This document uses the schisto mesocosm 2016 data to explore cercariae
+production from snail hosts of different body sizes (diameter in mm and
+mass in mg) over a 14 week period under high and low N/P nutrient
+conditions. Host reproduction (egg masses) is also calculated.
+
+\subsubsection{Install dependencies}\label{install-dependencies}
+
+\subsubsection{Get data}\label{get-data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wd <-}\StringTok{ }\NormalTok{params}\OperatorTok{$}\NormalTok{dir }\CommentTok{# working dir is set in yaml header}
+\KeywordTok{setwd}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(wd,}\StringTok{"/"}\NormalTok{))}
+\NormalTok{f <-}\StringTok{ "meso1.csv"}
+\NormalTok{f2 <-}\StringTok{ "meso2.csv"} 
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Load data}\label{load-data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{meso1 <-}\StringTok{ }\KeywordTok{read.table}\NormalTok{(f,}\DataTypeTok{header=}\NormalTok{T,}\DataTypeTok{sep=}\StringTok{","}\NormalTok{, }\DataTypeTok{row.names=}\OtherTok{NULL}\NormalTok{,}\DataTypeTok{stringsAsFactors=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{strip.white=}\OtherTok{TRUE}\NormalTok{) }\CommentTok{# read data}
+\NormalTok{meso2 <-}\StringTok{ }\KeywordTok{read.table}\NormalTok{(f2,}\DataTypeTok{header=}\NormalTok{T,}\DataTypeTok{sep=}\StringTok{","}\NormalTok{,}\DataTypeTok{row.names=}\OtherTok{NULL}\NormalTok{,}\DataTypeTok{stringsAsFactors=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{strip.white=}\OtherTok{TRUE}\NormalTok{) }\CommentTok{# read data}
+\KeywordTok{colnames}\NormalTok{(meso2)[}\DecValTok{2}\NormalTok{] <-}\StringTok{ "NP"} \CommentTok{# fix col names}
+\NormalTok{meso2}\OperatorTok{$}\NormalTok{Week <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Week)}
+\KeywordTok{str}\NormalTok{(meso2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+'data.frame':   768 obs. of  9 variables:
+ $ Tank   : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ NP     : chr  "High" "Low" "Low" "High" ...
+ $ Size   : chr  "Small" "Intermediate" "Intermediate" "Small" ...
+ $ Schisto: chr  "No" "Yes" "Yes" "Yes" ...
+ $ Date   : chr  "24/05/16" "24/05/16" "24/05/16" "24/05/16" ...
+ $ Week   : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ Eggs   : int  0 0 1 0 0 0 7 10 1 0 ...
+ $ Phyto_F: num  2585 1005 1327 1399 2341 ...
+ $ Peri_F : num  7301 4711 7253 8212 4293 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{meso1[}\KeywordTok{is.na}\NormalTok{(meso1)] <-}\StringTok{ }\DecValTok{0}\NormalTok{ ; meso2[}\KeywordTok{is.na}\NormalTok{(meso2)] <-}\StringTok{ }\DecValTok{0} \CommentTok{# remove NAs}
+\NormalTok{mass <-}\StringTok{ }\FloatTok{0.0096}\OperatorTok{*}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Diameter}\OperatorTok{^}\DecValTok{3}\NormalTok{) }\CommentTok{# add mass to df}
+\NormalTok{meso1}\OperatorTok{$}\NormalTok{Mass <-}\StringTok{ }\NormalTok{mass  }
+\end{Highlighting}
+\end{Shaded}
+
+Outlier
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"Outlier"}\NormalTok{); meso1[}\KeywordTok{which}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass}\OperatorTok{==}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass)),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Outlier"
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 1 x 9
+   Tank Picture_Name Date     Snail Diameter Cercariae  Week Sampling_Effort  Mass
+* <int> <chr>        <chr>    <chr>    <dbl>     <int> <int>           <dbl> <dbl>
+1    38 P1001057     29/06/16 143       50.5         0     6               3 1239.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{outlier <-}\StringTok{ }\DecValTok{0} \CommentTok{# remove outlier from data?}
+\ControlFlowTok{if}\NormalTok{(outlier}\OperatorTok{==}\DecValTok{1}\NormalTok{)\{meso1 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso1,Mass}\OperatorTok{<}\KeywordTok{max}\NormalTok{(Mass))\}}
+\end{Highlighting}
+\end{Shaded}
+
+Cleaning Snail and Date cols
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#unique(meso1$Snail)}
+\CommentTok{#unique(meso1$Date)}
+\KeywordTok{sapply}\NormalTok{(meso1, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{sum}\NormalTok{(}\KeywordTok{nchar}\NormalTok{(x))) }\CommentTok{# check number of characters in each col}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+           Tank    Picture_Name            Date           Snail        Diameter       Cercariae 
+          84102          367153          358163           86955          239237           46575 
+           Week Sampling_Effort            Mass 
+          58976           46116          668838 
+\end{verbatim}
+
+Set Cex sizes
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cex_cer <-}\StringTok{ }\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Cercariae}\OperatorTok{+}\DecValTok{1}\NormalTok{)}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{cex_sam <-}\StringTok{ }\NormalTok{meso1}\OperatorTok{$}\NormalTok{Sampling_Effort}\OperatorTok{/}\FloatTok{1.5}
+\NormalTok{cex_diam <-}\StringTok{ }\NormalTok{meso1}\OperatorTok{$}\NormalTok{Diameter}\OperatorTok{/}\DecValTok{3}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Set plotting graphics}\label{set-plotting-graphics}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot_it <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(manuscript,bg,cp,alpha,family)\{ }\CommentTok{# plotting function (plot for MS or not, set bg color, set color palette from RColorBrewer, set alpha value for transperancy) }
+  \KeywordTok{graphics.off}\NormalTok{()}
+  \ControlFlowTok{if}\NormalTok{(manuscript}\OperatorTok{==}\DecValTok{0}\NormalTok{)\{}
+    \ControlFlowTok{if}\NormalTok{(bg}\OperatorTok{==}\StringTok{"black"}\NormalTok{)\{}
+\NormalTok{      colvec<-}\KeywordTok{magma}\NormalTok{(}\DecValTok{200}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+      \KeywordTok{par}\NormalTok{(}\DataTypeTok{bg =}\NormalTok{ colvec[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col.axis=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{col.lab=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{col.main=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{fg=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{,}\DataTypeTok{las=}\DecValTok{1}\NormalTok{,}\DataTypeTok{mar=}\KeywordTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{2}\NormalTok{),}\DataTypeTok{family=}\NormalTok{family) }\CommentTok{#mono}
+\NormalTok{      border=}\KeywordTok{adjustcolor}\NormalTok{(}\StringTok{"purple"}\NormalTok{,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{)}
+\NormalTok{    \}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{      colvec<-}\KeywordTok{bpy.colors}\NormalTok{(}\DecValTok{200}\NormalTok{)}
+      \KeywordTok{par}\NormalTok{(}\DataTypeTok{bg =}\NormalTok{ colvec[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col.axis=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{col.lab=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{col.main=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{fg=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{,}\DataTypeTok{las=}\DecValTok{1}\NormalTok{,}\DataTypeTok{mar=}\KeywordTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{2}\NormalTok{),}\DataTypeTok{family=}\NormalTok{family) }
+\NormalTok{      border=}\KeywordTok{adjustcolor}\NormalTok{(}\StringTok{"blue"}\NormalTok{,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{)}
+\NormalTok{    \}}
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{\{}
+\CommentTok{#    graphics.off()}
+    \KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{,}\DataTypeTok{las=}\DecValTok{1}\NormalTok{,}\DataTypeTok{family=}\NormalTok{family) }
+\NormalTok{  \}}
+  \CommentTok{# color palettes}
+  \CommentTok{# ifelse(manuscript==1,colvec<-adjustcolor(brewer.pal(9,cp)[9], alpha = alpha),colvec <- adjustcolor(brewer.pal(9,cp)[5], alpha = alpha)) # fine tune plotting colors for plotting bg}
+   \CommentTok{# colfunc <<- colorRampPalette(brewer.pal(9,cp),alpha=alpha)}
+\NormalTok{  colfunc <<-}\StringTok{ }\KeywordTok{adjustcolor}\NormalTok{(}\KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{9}\NormalTok{,cp),}\DataTypeTok{alpha=}\NormalTok{alpha) }\CommentTok{# USES <<- OPERATOR}
+\NormalTok{\}}
+
+\CommentTok{# Setting ggplot theme graphics}
+\NormalTok{plot_it_gg <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(bg)\{ }\CommentTok{# bg = colour to plot bg, family = font family}
+  \ControlFlowTok{if}\NormalTok{(bg}\OperatorTok{==}\StringTok{"white"}\NormalTok{)\{}
+\NormalTok{    bg <-}\StringTok{ "white"}
+\NormalTok{    fg <-}\StringTok{ "black"}
+  \KeywordTok{theme_tufte}\NormalTok{(}\DataTypeTok{base_family =} \StringTok{"HersheySans"}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(),}\DataTypeTok{panel.grid.major =} \KeywordTok{element_blank}\NormalTok{(),}\DataTypeTok{panel.grid.minor =} \KeywordTok{element_blank}\NormalTok{(),}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =}\NormalTok{ bg,}\DataTypeTok{colour =}\NormalTok{ bg),}\DataTypeTok{plot.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{bg)) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.line =} \KeywordTok{element_line}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ fg)) }\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.ticks =} \KeywordTok{element_line}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ fg)) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{colour =}\NormalTok{ fg)) }\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.title.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{colour =}\NormalTok{ fg), }\DataTypeTok{axis.title.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{colour =}\NormalTok{ fg)) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ fg),}\DataTypeTok{axis.text.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ fg)) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.key =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =}\NormalTok{ bg)) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{colour=}\NormalTok{fg)) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{colour=}\NormalTok{fg))}
+\NormalTok{\}}
+\NormalTok{  \}}\CommentTok{# end gg}
+\end{Highlighting}
+\end{Shaded}
+
+Set plotting parameters
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"1/0, set colour, set colour palette 'display.brewer.all()',set alpha for col,set font"}\NormalTok{)}
+\KeywordTok{plot_it}\NormalTok{(}\DecValTok{0}\NormalTok{,}\StringTok{"blue"}\NormalTok{,}\StringTok{"YlOrRd"}\NormalTok{,}\DecValTok{1}\NormalTok{,}\StringTok{"HersheySans"}\NormalTok{) }\CommentTok{# set col function params}
+\KeywordTok{plot_it_gg}\NormalTok{(}\StringTok{"white"}\NormalTok{) }\CommentTok{# same as above}
+
+\CommentTok{# set colors you want}
+\NormalTok{col <-}\StringTok{ "lightblue"} 
+\NormalTok{col2 <-}\StringTok{ "orange"} 
+\end{Highlighting}
+\end{Shaded}
+
+Get only infected snails
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get only infected snails}
+\NormalTok{meso1_II <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso1,}\DataTypeTok{subset=}\NormalTok{Cercariae}\OperatorTok{>}\DecValTok{0}\NormalTok{)}
+\NormalTok{meso1_UU <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso1,}\DataTypeTok{subset=}\NormalTok{Cercariae}\OperatorTok{==}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+~
+
+\subsection{Mesocosm1 data sheet}\label{mesocosm1-data-sheet}
+
+\subsubsection{Snail size per tank}\label{snail-size-per-tank}
+
+Shell diameter (mm) per tank
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Diameter),}\DecValTok{10}\NormalTok{,ceiling)}
+\KeywordTok{boxplot}\NormalTok{(Diameter}\OperatorTok{~}\NormalTok{Tank, }\DataTypeTok{data=}\NormalTok{meso1,}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+        \DataTypeTok{col =} \StringTok{"light blue"}\NormalTok{,}
+        \DataTypeTok{notch =}\NormalTok{ T,}\DataTypeTok{xlab=}\StringTok{"Tank"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Diameter (mm)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Shell diameter (mm) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{)}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\StringTok{"pink"}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{with}\NormalTok{(meso1,}\KeywordTok{t.test}\NormalTok{(Diameter,Tank)) }\CommentTok{# t.test}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Welch Two Sample t-test
+
+data:  Diameter and Tank
+t = -292.62, df = 54631, p-value < 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -19.45781 -19.19889
+sample estimates:
+mean of x mean of y 
+ 5.822942 25.151292 
+\end{verbatim}
+
+\subsubsection{Snail diameter (mm)
+distribution}\label{snail-diameter-mm-distribution}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\NormalTok{den <-}\StringTok{ }\KeywordTok{density}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Diameter)}
+\NormalTok{xlim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{x),}\DecValTok{10}\NormalTok{,ceiling) }
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{y),}\FloatTok{0.1}\NormalTok{,ceiling)}
+\KeywordTok{plot}\NormalTok{(den,}
+     \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+     \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}
+     \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+     \DataTypeTok{xlab=}\StringTok{"Diameter (mm)"}\NormalTok{,}
+     \DataTypeTok{ylab=}\StringTok{"Density"}\NormalTok{,}
+     \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Overall shell diameter (mm) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{))}
+\KeywordTok{polygon}\NormalTok{(den, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{col) }\CommentTok{# fill AUC }
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# un/infected diameter }
+\CommentTok{# Uninfected}
+\NormalTok{den <-}\StringTok{ }\KeywordTok{density}\NormalTok{(meso1_UU}\OperatorTok{$}\NormalTok{Diameter)}
+\KeywordTok{plot}\NormalTok{(den,}
+     \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+     \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}
+     \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+     \DataTypeTok{xlab=}\StringTok{"Diameter (mm)"}\NormalTok{,}
+     \DataTypeTok{ylab=}\StringTok{"Density"}\NormalTok{,}
+     \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Shell diameter (mm) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{))}
+\KeywordTok{polygon}\NormalTok{(den, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{col) }\CommentTok{# fill AUC }
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(meso1_UU}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\CommentTok{# Infected }
+\NormalTok{den2 <-}\StringTok{ }\KeywordTok{density}\NormalTok{(meso1_II}\OperatorTok{$}\NormalTok{Diameter) }
+\KeywordTok{plot}\NormalTok{(den2,}
+     \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col2,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+     \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}
+     \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+     \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}
+     \DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}
+     \DataTypeTok{main=}\StringTok{""}\NormalTok{)}
+\KeywordTok{polygon}\NormalTok{(den2, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col2,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{col2) }\CommentTok{# fill AUC }
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(meso1_II}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\NormalTok{col2,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{family=}\StringTok{"mono"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"right"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Uninfected"}\NormalTok{,}\StringTok{"Infected"}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(col,col2),}
+       \DataTypeTok{bty=}\StringTok{"n"}\NormalTok{,}\DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{pt.cex=}\FloatTok{1.5}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{0.7}\NormalTok{,}\DataTypeTok{y.intersp =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{xjust =} \FloatTok{0.5}\NormalTok{,}
+       \DataTypeTok{title=}\StringTok{""}\NormalTok{,}\DataTypeTok{title.adj =} \FloatTok{0.3}\NormalTok{,}
+       \CommentTok{# text.font=2,}
+       \DataTypeTok{trace=}\NormalTok{T,}\DataTypeTok{inset=}\FloatTok{0.1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-11-2.pdf}
+
+\begin{verbatim}
+  xchar= 1.181 ; (yextra,ychar)= -0.003635 0.003635 
+  points2( 46.65 46.65 , 0.1 0.09637 , pch= 20 20 , ...) 
+\end{verbatim}
+
+\subsubsection{Snail size over time
+(weeks)}\label{snail-size-over-time-weeks}
+
+Shell diameter (mm) over time (weeks)\\
+\textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{layout}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)) }\CommentTok{# plot stacked plots}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Diameter),}\DecValTok{10}\NormalTok{,ceiling)}
+\KeywordTok{boxplot}\NormalTok{(Diameter}\OperatorTok{~}\NormalTok{Week, }\DataTypeTok{data=}\NormalTok{meso1,}
+        \CommentTok{# xlim=c(0,max(meso1$Week)),}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+        \DataTypeTok{col =}\NormalTok{ col,}
+        \DataTypeTok{notch =}\NormalTok{ T,}\DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Diameter (mm)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Shell diameter (mm) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{),}
+        \DataTypeTok{xaxs =} \StringTok{"i"}\NormalTok{, }\DataTypeTok{yaxs =} \StringTok{"i"}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(ylim}\OperatorTok{/}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\CommentTok{# un/infected}
+\KeywordTok{boxplot}\NormalTok{(Diameter}\OperatorTok{~}\NormalTok{Week, }\DataTypeTok{data=}\NormalTok{meso1_UU,}
+        \CommentTok{# xlim=c(0,max(meso1$Week)),}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+        \DataTypeTok{col =}\NormalTok{ col,}
+        \DataTypeTok{notch =}\NormalTok{ T,}\DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Diameter (mm)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Shell diameter (mm) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks }\CharTok{\textbackslash{}n}\StringTok{(uninfected snails)"}\NormalTok{),}
+        \DataTypeTok{xaxs =} \StringTok{"i"}\NormalTok{, }\DataTypeTok{yaxs =} \StringTok{"i"}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1_UU}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(ylim}\OperatorTok{/}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+
+\CommentTok{# infected}
+\KeywordTok{boxplot}\NormalTok{(Diameter}\OperatorTok{~}\NormalTok{Week, }\DataTypeTok{data=}\NormalTok{meso1_II,}
+        \CommentTok{# xlim=c(0,max(meso1$Week)),}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+        \DataTypeTok{col =}\NormalTok{ col2,}
+        \DataTypeTok{notch =}\NormalTok{ T,}\DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Diameter (mm)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Shell diameter (mm) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks }\CharTok{\textbackslash{}n}\StringTok{ (infected snails)"}\NormalTok{),}
+        \DataTypeTok{xaxs =} \StringTok{"i"}\NormalTok{, }\DataTypeTok{yaxs =} \StringTok{"i"}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1_II}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(ylim}\OperatorTok{/}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\subsubsection{Snail size over time (weeks) per
+tank}\label{snail-size-over-time-weeks-per-tank}
+
+\paragraph{\texorpdfstring{Snail size density over time for all tanks
+(total = 48) have been saved as `Size\_per\_tank\_over\_time.pdf' in
+/Users/malishev/Documents/Emory/research/mesocosm}{Snail size density over time for all tanks (total = 48) have been saved as Size\_per\_tank\_over\_time.pdf in /Users/malishev/Documents/Emory/research/mesocosm}}\label{snail-size-density-over-time-for-all-tanks-total-48-have-been-saved-as-size_per_tank_over_time.pdf-in-usersmalishevdocumentsemoryresearchmesocosm}
+
+~ \textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{#### size dist per tank over time ('Snail size over time (weeks)' but for each tank)}
+\CommentTok{# Plot Tanks with large nutrients at the beginning versus tanks with lower nutrients}
+\CommentTok{# Pick high and low nutrient tanks to compare}
+
+\CommentTok{# Focus on diameter rather than biomass}
+
+\CommentTok{# Eight replicates per size class and NP combo: six received schisto, two didn't. (Replication factor)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Select tank #. Max 48   }
+\NormalTok{tank <-}\StringTok{ }\DecValTok{45}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{layout}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)) }\CommentTok{# plot stacked plots}
+\NormalTok{snail <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso1,}\DataTypeTok{subset=}\NormalTok{Tank}\OperatorTok{==}\NormalTok{tank) }\CommentTok{# get tank level indiviudals}
+
+\KeywordTok{ggplot}\NormalTok{(snail, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Diameter, }\DataTypeTok{y =} \KeywordTok{as.factor}\NormalTok{(Week), }\DataTypeTok{fill=}\NormalTok{..x..)) }\OperatorTok{+}\StringTok{ }\CommentTok{# geom_density_ridges()}
+\StringTok{  }\CommentTok{# scale = overlap}
+\StringTok{  }\KeywordTok{geom_density_ridges_gradient}\NormalTok{(}\DataTypeTok{scale =} \DecValTok{5}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.2}\NormalTok{,}\DataTypeTok{color=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{rel_min_height =} \FloatTok{0.01}\NormalTok{,}\DataTypeTok{panel_scaling=}\NormalTok{T,}\DataTypeTok{alpha=}\FloatTok{0.2}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_density_ridges}\NormalTok{(}\DataTypeTok{scale =} \DecValTok{5}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.2}\NormalTok{,}\DataTypeTok{color=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{rel_min_height =} \FloatTok{0.01}\NormalTok{,}\DataTypeTok{fill=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{alpha=}\FloatTok{0.2}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\CommentTok{# geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +}
+\StringTok{  }\KeywordTok{scale_fill_viridis}\NormalTok{(}\DataTypeTok{name =} \StringTok{"Diameter"}\NormalTok{, }\DataTypeTok{alpha=}\FloatTok{0.1}\NormalTok{, }\DataTypeTok{option =} \StringTok{"magma"}\NormalTok{,}\DataTypeTok{direction=}\OperatorTok{-}\DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }\CommentTok{# "magma", "inferno","plasma", "viridis", "cividis"}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{25}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{"Snail diameter over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks for tank "}\NormalTok{,tank)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Snail diameter (mm)"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Week"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{plot_it_gg}\NormalTok{(}\StringTok{"white"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+\subsubsection{Body mass (mg) over time
+(weeks)}\label{body-mass-mg-over-time-weeks}
+
+(Soft tissue dry mass in mg = 0.0096 * Diameter{[}in mm{]}\^{}3)\\
+\textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks
+
+Outer\\
+Outlier
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{layout}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{))}\CommentTok{# plot stacked plots}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass),}\DecValTok{100}\NormalTok{,ceiling)}
+\KeywordTok{boxplot}\NormalTok{(Mass}\OperatorTok{~}\NormalTok{Week, }\DataTypeTok{data=}\NormalTok{meso1,}
+        \CommentTok{# xlim=c(0,max(meso1$Week)),}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+        \DataTypeTok{col =}\NormalTok{ col,}
+        \DataTypeTok{notch =}\NormalTok{ T,}\DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Dry body mass (mg)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Body mass (mg) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{),}
+        \DataTypeTok{xaxs =} \StringTok{"i"}\NormalTok{, }\DataTypeTok{yaxs =} \StringTok{"i"}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(ylim}\OperatorTok{/}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+
+\NormalTok{### uninfected }\AlertTok{###}
+\KeywordTok{boxplot}\NormalTok{(Mass}\OperatorTok{~}\NormalTok{Week, }\DataTypeTok{data=}\NormalTok{meso1_UU,}
+        \CommentTok{# xlim=c(0,max(meso1$Week)),}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+        \DataTypeTok{col =}\NormalTok{ col,}
+        \DataTypeTok{notch =}\NormalTok{ T,}\DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Dry body mass (mg)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Body mass (mg) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks }\CharTok{\textbackslash{}n}\StringTok{(uninfected)"}\NormalTok{),}
+        \DataTypeTok{xaxs =} \StringTok{"i"}\NormalTok{, }\DataTypeTok{yaxs =} \StringTok{"i"}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(ylim}\OperatorTok{/}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\NormalTok{### infected }\AlertTok{###}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso1_II}\OperatorTok{$}\NormalTok{Mass),}\DecValTok{100}\NormalTok{,ceiling)}
+\KeywordTok{boxplot}\NormalTok{(Mass}\OperatorTok{~}\NormalTok{Week, }\DataTypeTok{data=}\NormalTok{meso1_II,}
+        \CommentTok{# xlim=c(0,max(meso1$Week)),}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+        \DataTypeTok{col =}\NormalTok{ col2,}
+        \DataTypeTok{notch =}\NormalTok{ F,}\DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Dry body mass (mg)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Body mass (mg) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks }\CharTok{\textbackslash{}n}\StringTok{(infected)"}\NormalTok{),}
+        \DataTypeTok{xaxs =} \StringTok{"i"}\NormalTok{, }\DataTypeTok{yaxs =} \StringTok{"i"}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass),}\DataTypeTok{col=}\NormalTok{col2,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(ylim}\OperatorTok{/}\FloatTok{1.2}\NormalTok{,}\DecValTok{2}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\textbf{Without outlier}
+
+Outlier
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{outer <-}\StringTok{ }\NormalTok{meso1[}\KeywordTok{which}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass}\OperatorTok{==}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass)),][,}\KeywordTok{c}\NormalTok{(}\StringTok{"Mass"}\NormalTok{,}\StringTok{"Cercariae"}\NormalTok{)] }\CommentTok{# identify outlier}
+\NormalTok{outer}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 1 x 2
+   Mass Cercariae
+* <dbl>     <int>
+1 1239.         0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{layout}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{))}\CommentTok{# plot stacked plots}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass),}\DecValTok{100}\NormalTok{,ceiling)}
+\KeywordTok{boxplot}\NormalTok{(Mass}\OperatorTok{~}\NormalTok{Week, }\DataTypeTok{data=}\NormalTok{meso1,}
+        \DataTypeTok{outline =}\NormalTok{ F,}
+        \CommentTok{# xlim=c(0,max(meso1$Week)),}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{60}\NormalTok{),}
+        \DataTypeTok{col =}\NormalTok{ col,}
+        \DataTypeTok{notch =}\NormalTok{ T,}\DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Dry body mass (mg)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Body mass (mg) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks without outlier"}\NormalTok{),}
+        \DataTypeTok{xaxs =} \StringTok{"i"}\NormalTok{, }\DataTypeTok{yaxs =} \StringTok{"i"}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(ylim}\OperatorTok{/}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+
+\NormalTok{### uninfected }\AlertTok{###}
+\KeywordTok{boxplot}\NormalTok{(Mass}\OperatorTok{~}\NormalTok{Week, }\DataTypeTok{data=}\NormalTok{meso1_UU,}\DataTypeTok{outline=}\NormalTok{F,}
+        \CommentTok{# xlim=c(0,max(meso1$Week)),}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{60}\NormalTok{),}
+        \DataTypeTok{col =}\NormalTok{ col,}
+        \DataTypeTok{notch =}\NormalTok{ T,}\DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Dry body mass (mg)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Body mass (mg) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks  }\CharTok{\textbackslash{}n}\StringTok{(uninfected)"}\NormalTok{),}
+        \DataTypeTok{xaxs =} \StringTok{"i"}\NormalTok{, }\DataTypeTok{yaxs =} \StringTok{"i"}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(ylim}\OperatorTok{/}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\NormalTok{### infected }\AlertTok{###}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso1_II}\OperatorTok{$}\NormalTok{Mass),}\DecValTok{100}\NormalTok{,ceiling)}
+\KeywordTok{boxplot}\NormalTok{(Mass}\OperatorTok{~}\NormalTok{Week, }\DataTypeTok{data=}\NormalTok{meso1_II,}
+        \CommentTok{# xlim=c(0,max(meso1$Week)),}
+        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+        \DataTypeTok{col =}\NormalTok{ col2,}
+        \DataTypeTok{notch =}\NormalTok{ F,}\DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Dry body mass (mg)"}\NormalTok{,}
+        \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Body mass (mg) over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks  }\CharTok{\textbackslash{}n}\StringTok{(infected)"}\NormalTok{),}
+        \DataTypeTok{xaxs =} \StringTok{"i"}\NormalTok{, }\DataTypeTok{yaxs =} \StringTok{"i"}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass),}\DataTypeTok{col=}\NormalTok{col2,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(ylim}\OperatorTok{/}\FloatTok{1.2}\NormalTok{,}\DecValTok{2}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+\subsubsection{Snail size and number of cercariae
+produced}\label{snail-size-and-number-of-cercariae-produced}
+
+Point size by cercariae number
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{with}\NormalTok{(meso1,}\KeywordTok{plot}\NormalTok{(Diameter,}\KeywordTok{log}\NormalTok{(Cercariae),}\DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}
+                \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+                \DataTypeTok{cex=}\NormalTok{cex_cer}\OperatorTok{+}\FloatTok{0.5}\NormalTok{,}
+                \DataTypeTok{ylab=}\StringTok{"Log number of cercariae released over 90 mins"}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{" Diameter (mm)"}
+\NormalTok{))}
+\KeywordTok{title}\NormalTok{(}\StringTok{"Number of cercarie for each snail length (mm)"}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\NormalTok{col)}\CommentTok{# mean diameter}
+\KeywordTok{points}\NormalTok{(outer,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{,}\DataTypeTok{pch=}\DecValTok{20}\NormalTok{) }\CommentTok{# plot outlier}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-20-1.pdf}
+Linear log
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# summary(with(meso1,lm(log(Cercariae)~Diameter))) # linear log}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Snail mass and cercariae produced
+(mg)}\label{snail-mass-and-cercariae-produced-mg}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{with}\NormalTok{(meso1,}\KeywordTok{plot}\NormalTok{(}\KeywordTok{log}\NormalTok{(Mass),Cercariae,}\DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}
+                \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+                \DataTypeTok{cex=}\NormalTok{cex_cer}\OperatorTok{+}\FloatTok{0.5}\NormalTok{,}
+                \CommentTok{# cex=1.5,}
+                \DataTypeTok{ylab=}\StringTok{"Number of cercariae released over 90 mins"}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{"Log dry body mass (mg)"}\NormalTok{))}
+\KeywordTok{title}\NormalTok{(}\StringTok{"Number of cercariae for each log snail mass (mg)"}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{log}\NormalTok{(}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass)),}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\NormalTok{col)}\CommentTok{# mean diameter}
+\NormalTok{outer <-}\StringTok{ }\NormalTok{meso1[}\KeywordTok{which}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass}\OperatorTok{==}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Mass)),][,}\KeywordTok{c}\NormalTok{(}\StringTok{"Mass"}\NormalTok{,}\StringTok{"Cercariae"}\NormalTok{)] }\CommentTok{# identify outlier}
+\KeywordTok{points}\NormalTok{(outer,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{,}\DataTypeTok{pch=}\DecValTok{20}\NormalTok{) }\CommentTok{# plot outlier}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-22-1.pdf}
+
+\subsubsection{Snail size per tank}\label{snail-size-per-tank-1}
+
+Shell diameter (mm)\\
+Select tank \#. max 48
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tank <-}\StringTok{ }\DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{layout}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)) }\CommentTok{# plot stacked plots}
+\NormalTok{snail <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso1,}\DataTypeTok{subset=}\NormalTok{Tank}\OperatorTok{==}\NormalTok{tank) }\CommentTok{# get tank level indiviudals}
+\NormalTok{diam_total <-}\StringTok{ }\DecValTok{1} \CommentTok{# set ylim either to max for tank or max across all tanks (16.8)}
+\NormalTok{den <-}\StringTok{ }\KeywordTok{density}\NormalTok{(snail}\OperatorTok{$}\NormalTok{Diameter) }\CommentTok{# get diameter density}
+\NormalTok{xlim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{x),}\DecValTok{10}\NormalTok{,ceiling)}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{y),}\FloatTok{0.05}\NormalTok{,ceiling)}
+\KeywordTok{plot}\NormalTok{(den,}
+     \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+     \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+     \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}
+\NormalTok{)}
+\KeywordTok{polygon}\NormalTok{(den, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{col) }\CommentTok{# fill AUC}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(snail}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Shell diameter (mm) distribution for tank #"}\NormalTok{,tank),}
+      \DataTypeTok{xlab=}\StringTok{"Shell diameter (mm)"}\NormalTok{)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{ylab=}\StringTok{"Density"}\NormalTok{,}\DataTypeTok{line=}\FloatTok{3.5}\NormalTok{)}
+
+\NormalTok{### uninfected }\AlertTok{###}
+\NormalTok{snail_UU <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(snail,}\DataTypeTok{subset=}\NormalTok{Cercariae}\OperatorTok{==}\DecValTok{0}\NormalTok{)}
+\NormalTok{den <-}\StringTok{ }\KeywordTok{density}\NormalTok{(snail_UU}\OperatorTok{$}\NormalTok{Diameter) }\CommentTok{# get diameter density}
+\NormalTok{xlim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{x),}\DecValTok{10}\NormalTok{,ceiling)}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{y),}\FloatTok{0.05}\NormalTok{,ceiling)}
+\KeywordTok{plot}\NormalTok{(den,}
+     \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+     \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+     \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}
+\NormalTok{)}
+\KeywordTok{polygon}\NormalTok{(den, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{col) }\CommentTok{# fill AUC}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(snail_UU}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Uninfected snails in tank #"}\NormalTok{,tank),}
+      \DataTypeTok{xlab=}\StringTok{"Shell diameter (mm)"}\NormalTok{)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{ylab=}\StringTok{"Density"}\NormalTok{,}\DataTypeTok{line=}\FloatTok{3.5}\NormalTok{)}
+
+\NormalTok{### infected }\AlertTok{###}
+\NormalTok{snail_II <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(snail,}\DataTypeTok{subset=}\NormalTok{Cercariae}\OperatorTok{>}\DecValTok{0}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(}\KeywordTok{length}\NormalTok{(snail_II}\OperatorTok{$}\NormalTok{Tank)}\OperatorTok{>}\DecValTok{0}\NormalTok{)\{}
+\NormalTok{  den2 <-}\StringTok{ }\KeywordTok{density}\NormalTok{(snail_II}\OperatorTok{$}\NormalTok{Diameter) }\CommentTok{# get diameter density}
+  \KeywordTok{plot}\NormalTok{(den2,}
+       \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col2,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+       \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+       \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}
+\NormalTok{  )}
+  \KeywordTok{polygon}\NormalTok{(den2, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col2,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{col2) }\CommentTok{# fill AUC}
+  \KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(snail_II}\OperatorTok{$}\NormalTok{Diameter),}\DataTypeTok{col=}\NormalTok{col2,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+  \KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Infected snails in tank #"}\NormalTok{,tank),}
+        \DataTypeTok{xlab=}\StringTok{"Shell diameter (mm)"}\NormalTok{)}
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}
+  \KeywordTok{plot}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DataTypeTok{type=}\StringTok{"n"}\NormalTok{);}\KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Infected snails in tank #"}\NormalTok{,tank)); }\KeywordTok{text}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{0.5}\NormalTok{,}\KeywordTok{paste0}\NormalTok{(}\StringTok{"No cercariae }\CharTok{\textbackslash{}n}\StringTok{in tank #"}\NormalTok{,tank))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-24-1.pdf}
+
+\subsubsection{Cercariae production over
+time}\label{cercariae-production-over-time}
+
+Cercariae shed over 90 mins per week\\
+\textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks\\
+Snail abundance over time (weeks)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\NormalTok{xlim <-}\StringTok{ }\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week) }\CommentTok{# uses total num of weeks}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Cercariae),}\DecValTok{100}\NormalTok{,ceiling)}
+\KeywordTok{with}\NormalTok{(meso1,}\KeywordTok{plot}\NormalTok{(Cercariae}\OperatorTok{~}\NormalTok{Week,}
+                \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+                \DataTypeTok{type=}\StringTok{"h"}\NormalTok{,}
+                \DataTypeTok{lwd=}\DecValTok{5}\NormalTok{,}
+                \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+                \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}
+\NormalTok{))}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Cercariae),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Cercariae production over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{),}
+      \DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{ylab=}\StringTok{"Number of cercariae shed in 90 mins"}\NormalTok{,}\DataTypeTok{line=}\FloatTok{3.5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-25-1.pdf}
+
+\subsubsection{Tank cercariae production over time per
+tank}\label{tank-cercariae-production-over-time-per-tank}
+
+Select tank \#. max 48
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tank <-}\StringTok{ }\DecValTok{9}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\NormalTok{cer_total <-}\StringTok{ }\DecValTok{0} \CommentTok{# set ylim either to max for tank (1) or max across all tanks (6100)}
+
+\NormalTok{snail <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso1,}\DataTypeTok{subset=}\NormalTok{Tank}\OperatorTok{==}\NormalTok{tank) }\CommentTok{# get tank level individuals}
+\NormalTok{snail <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(snail,}\DataTypeTok{subset=}\NormalTok{Cercariae}\OperatorTok{>}\DecValTok{0}\NormalTok{) }\CommentTok{# get only cercariae}
+\NormalTok{xlim <-}\StringTok{ }\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week) }\CommentTok{# uses total num of weeks}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(snail}\OperatorTok{$}\NormalTok{Cercariae),}\DecValTok{100}\NormalTok{,ceiling)}
+\KeywordTok{ifelse}\NormalTok{(cer_total}\OperatorTok{==}\DecValTok{1}\NormalTok{,ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Cercariae),}\DecValTok{100}\NormalTok{,ceiling),ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(snail}\OperatorTok{$}\NormalTok{Cercariae),}\DecValTok{100}\NormalTok{,ceiling))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 400
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\ControlFlowTok{if}\NormalTok{(}\KeywordTok{length}\NormalTok{(snail}\OperatorTok{$}\NormalTok{Cercariae)}\OperatorTok{>}\DecValTok{0}\NormalTok{)\{}
+  \KeywordTok{with}\NormalTok{(snail,}\KeywordTok{plot}\NormalTok{(Cercariae}\OperatorTok{~}\NormalTok{Week,}
+                  \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+                  \DataTypeTok{type=}\StringTok{"h"}\NormalTok{,}
+                  \DataTypeTok{lwd=}\DecValTok{5}\NormalTok{,}
+                  \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+                  \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}
+\NormalTok{  ))}
+  \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(snail}\OperatorTok{$}\NormalTok{Cercariae),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+  \KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Cercariae production for tank "}\NormalTok{,tank,}\StringTok{" over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{),}
+        \DataTypeTok{xlab=}\StringTok{"Week"}\NormalTok{)}
+  \KeywordTok{title}\NormalTok{(}\DataTypeTok{ylab=}\StringTok{"Number of cercariae shed in 90 mins"}\NormalTok{,}\DataTypeTok{line=}\FloatTok{3.5}\NormalTok{)}
+  \KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+  \KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{6}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(}\KeywordTok{max}\NormalTok{(snail}\OperatorTok{$}\NormalTok{Cercariae)}\OperatorTok{/}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{1.5}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}\KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{"No cercariae in tank #"}\NormalTok{,tank))\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-27-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{#####}
+
+\NormalTok{############################################################################################################}
+\NormalTok{############################################################################################################}
+\NormalTok{############################################################################################################}
+\end{Highlighting}
+\end{Shaded}
+
+\subparagraph{}\label{section-1}
+
+\subsection{Mesocosm 2 data sheet}\label{mesocosm-2-data-sheet}
+
+Clean data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{meso2}\OperatorTok{$}\NormalTok{Schisto <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Schisto))}\OperatorTok{-}\DecValTok{1}\CommentTok{# convert Y/N in Schisto col to 1/0}
+\CommentTok{# convert size to integers}
+\NormalTok{meso2}\OperatorTok{$}\NormalTok{Size <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"Intermediate"}\NormalTok{,}\StringTok{"2Intermediate"}\NormalTok{,meso2}\OperatorTok{$}\NormalTok{Size)}
+\NormalTok{meso2}\OperatorTok{$}\NormalTok{Size <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"Small"}\NormalTok{,}\StringTok{"1Small"}\NormalTok{,meso2}\OperatorTok{$}\NormalTok{Size)}
+\NormalTok{meso2}\OperatorTok{$}\NormalTok{Size <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"Large"}\NormalTok{,}\StringTok{"3Large"}\NormalTok{,meso2}\OperatorTok{$}\NormalTok{Size)}
+\NormalTok{meso2}\OperatorTok{$}\NormalTok{Size <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Size))}
+
+\NormalTok{### get snails with egg masses}
+\NormalTok{#### First get presence of schisto}
+\NormalTok{meso2_UU <-}\StringTok{  }\KeywordTok{subset}\NormalTok{(meso2,Schisto}\OperatorTok{==}\DecValTok{0}\NormalTok{)}
+\NormalTok{meso2_II <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso2,Schisto}\OperatorTok{==}\DecValTok{1}\NormalTok{)}
+
+\CommentTok{# get uninfected snails with egg masses}
+\NormalTok{eggs_UU <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso2_UU,Eggs}\OperatorTok{>}\DecValTok{0}\NormalTok{)}
+\CommentTok{# get infected snails with egg masses}
+\NormalTok{eggs_II <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso2_II,Eggs}\OperatorTok{>}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{# get size classes}
+\NormalTok{small <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso2,Size}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\CommentTok{#small}
+\NormalTok{int <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso2,Size}\OperatorTok{==}\DecValTok{2}\NormalTok{) }\CommentTok{#intermediate}
+\NormalTok{large <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso2,Size}\OperatorTok{==}\DecValTok{3}\NormalTok{) }\CommentTok{#large}
+
+\CommentTok{# get NP conc}
+\NormalTok{high <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso2,NP}\OperatorTok{==}\StringTok{"High"}\NormalTok{) }\CommentTok{# high NP conc}
+\NormalTok{low <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(meso2,NP}\OperatorTok{==}\StringTok{"Low"}\NormalTok{) }\CommentTok{# low NP conc}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Egg mass distribution}\label{egg-mass-distribution}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\NormalTok{den <-}\StringTok{ }\KeywordTok{density}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Eggs[meso2}\OperatorTok{$}\NormalTok{Eggs}\OperatorTok{>}\DecValTok{0}\NormalTok{]) }\CommentTok{# get only snails with eggs}
+\NormalTok{xlim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{x),}\DecValTok{50}\NormalTok{,ceiling)}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{y),}\FloatTok{0.01}\NormalTok{,ceiling)}
+\KeywordTok{plot}\NormalTok{(den,}
+     \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+     \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}
+     \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+     \DataTypeTok{xlab=}\StringTok{"Number of egg masses"}\NormalTok{,}
+     \DataTypeTok{ylab=}\StringTok{"Density"}\NormalTok{,}
+     \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Distribution of number of egg masses over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{))}
+\KeywordTok{polygon}\NormalTok{(den, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{col) }\CommentTok{# fill AUC}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Eggs),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-29-1.pdf}
+
+\subsubsection{N/P concentration v egg
+mass}\label{np-concentration-v-egg-mass}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{layout}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)) }\CommentTok{# plot stacked plots}
+\NormalTok{ylim=}\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Eggs),}\DecValTok{10}\NormalTok{)}
+\KeywordTok{with}\NormalTok{(meso2,}\KeywordTok{stripchart}\NormalTok{(Eggs}\OperatorTok{~}\NormalTok{NP,}
+                      \DataTypeTok{method=}\StringTok{"jitter"}\NormalTok{, }\DataTypeTok{jitter=}\FloatTok{0.1}\NormalTok{,}
+                      \DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{,}
+                      \CommentTok{# cex=cex_diam,}
+                      \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{),}
+                      \DataTypeTok{vertical=}\NormalTok{T,}
+                      \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+                      \DataTypeTok{group.names=}\KeywordTok{c}\NormalTok{(}\StringTok{"High"}\NormalTok{,}\StringTok{"Low"}\NormalTok{),}
+                      \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}\NormalTok{)}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Eggs),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Number of egg masses for high and low N/P levels over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{),}
+      \DataTypeTok{xlab=}\StringTok{"N/P level"}\NormalTok{)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{ylab=}\StringTok{"Number of egg masses"}\NormalTok{,}\DataTypeTok{line=}\FloatTok{3.5}\NormalTok{)}
+
+\NormalTok{### uninfected }\AlertTok{###}
+\KeywordTok{with}\NormalTok{(eggs_UU,}\KeywordTok{stripchart}\NormalTok{(Eggs}\OperatorTok{~}\NormalTok{NP,}
+                        \DataTypeTok{method=}\StringTok{"jitter"}\NormalTok{, }\DataTypeTok{jitter=}\FloatTok{0.1}\NormalTok{,}
+                        \DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{,}
+                        \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{),}
+                        \DataTypeTok{vertical=}\NormalTok{T,}
+                        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+                        \DataTypeTok{group.names=}\KeywordTok{c}\NormalTok{(}\StringTok{"High"}\NormalTok{,}\StringTok{"Low"}\NormalTok{),}
+                        \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}\NormalTok{)}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(eggs_UU}\OperatorTok{$}\NormalTok{Eggs),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Uninfected snails"}\NormalTok{),}
+      \DataTypeTok{xlab=}\StringTok{"N/P level"}\NormalTok{)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{ylab=}\StringTok{"Number of egg masses"}\NormalTok{,}\DataTypeTok{line=}\FloatTok{3.5}\NormalTok{)}
+
+\NormalTok{### infected }\AlertTok{###}
+\KeywordTok{with}\NormalTok{(eggs_II,}\KeywordTok{stripchart}\NormalTok{(Eggs}\OperatorTok{~}\NormalTok{NP,}
+                        \DataTypeTok{method=}\StringTok{"jitter"}\NormalTok{, }\DataTypeTok{jitter=}\FloatTok{0.1}\NormalTok{,}
+                        \DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{,}
+                        \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col2,}\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{),}
+                        \DataTypeTok{vertical=}\NormalTok{T,}
+                        \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+                        \DataTypeTok{group.names=}\KeywordTok{c}\NormalTok{(}\StringTok{"High"}\NormalTok{,}\StringTok{"Low"}\NormalTok{),}
+                        \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}\NormalTok{)}
+\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(eggs_II}\OperatorTok{$}\NormalTok{Eggs),}\DataTypeTok{col=}\NormalTok{col2,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Infected snails"}\NormalTok{),}
+      \DataTypeTok{xlab=}\StringTok{"N/P level"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-30-1.pdf}
+
+\subsubsection{Phyto and Peri
+Distribution}\label{phyto-and-peri-distribution}
+
+phyto = flourescence units\\
+peri = flourescence per 2 weeks / 3.5 inch\^{}2 tile (gross productivity
+biomass rate)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\NormalTok{den <-}\StringTok{ }\KeywordTok{density}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Phyto_F)}
+\NormalTok{xlim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{x),}\DecValTok{10000}\NormalTok{,ceiling)}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den}\OperatorTok{$}\NormalTok{y),}\FloatTok{0.0001}\NormalTok{,ceiling)}
+\KeywordTok{plot}\NormalTok{(den,}
+     \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+     \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}
+     \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+     \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}
+\NormalTok{)}
+\KeywordTok{polygon}\NormalTok{(den, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{col) }\CommentTok{# fill AUC}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Phyto_F),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T) }\CommentTok{# add periphyton concentration}
+\NormalTok{den2 <-}\StringTok{ }\KeywordTok{density}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Peri_F)}
+\KeywordTok{plot}\NormalTok{(den2,}
+     \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col2,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+     \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim), }\CommentTok{# uses xy lims from phyto}
+     \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+     \DataTypeTok{xlab=}\StringTok{""}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,}\DataTypeTok{main=}\StringTok{""}
+\NormalTok{)}
+\KeywordTok{polygon}\NormalTok{(den2, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col2,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{col2) }\CommentTok{# fill AUC}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Peri_F),}\DataTypeTok{col=}\NormalTok{col2,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Resource concentration over "}\NormalTok{,}\KeywordTok{max}\NormalTok{(meso1}\OperatorTok{$}\NormalTok{Week),}\StringTok{" weeks"}\NormalTok{),}
+      \DataTypeTok{xlab=}\StringTok{"Resource concentration"}\NormalTok{)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{ylab=}\StringTok{"Density"}\NormalTok{,}\DataTypeTok{line=}\FloatTok{3.5}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{family=}\StringTok{'mono'}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Phytoplankton"}\NormalTok{,}\StringTok{"Periphyton"}\NormalTok{),}\DataTypeTok{title=}\StringTok{"Resource type"}\NormalTok{,}
+       \DataTypeTok{border=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{pch=}\DecValTok{19}\NormalTok{,}\DataTypeTok{ncol=}\DecValTok{1}\NormalTok{,}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{,}
+       \DataTypeTok{cex=}\FloatTok{0.75}\NormalTok{,}
+       \DataTypeTok{xjust=}\FloatTok{0.5}\NormalTok{,}\DataTypeTok{yjust=}\FloatTok{0.5}\NormalTok{,}\DataTypeTok{x.intersp =} \FloatTok{0.5}\NormalTok{,}\DataTypeTok{y.intersp =} \FloatTok{0.5}\NormalTok{,}
+       \DataTypeTok{col=}\KeywordTok{c}\NormalTok{(col,col2)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-31-1.pdf}
+
+\subsubsection{Egg Mass over time v presence of
+schisto}\label{egg-mass-over-time-v-presence-of-schisto}
+
+\textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params}
+\KeywordTok{layout}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)) }\CommentTok{# plot stacked plots}
+\NormalTok{meso2}\OperatorTok{$}\NormalTok{Week <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Week)}
+\NormalTok{xlim <-}\StringTok{ }\KeywordTok{max}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Week)}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Eggs),}\DecValTok{10}\NormalTok{)}
+\KeywordTok{with}\NormalTok{(meso2,}\KeywordTok{stripchart}\NormalTok{(Eggs}\OperatorTok{~}\NormalTok{Week,}
+                      \DataTypeTok{method=}\StringTok{"jitter"}\NormalTok{, }\DataTypeTok{jitter=}\FloatTok{0.1}\NormalTok{,}
+                      \DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{,}
+                      \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+                      \DataTypeTok{vertical=}\NormalTok{T,}
+                      \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim), }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+                      \DataTypeTok{group.names=}\KeywordTok{unique}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Week),}
+                      \DataTypeTok{xlab=}\StringTok{"Weeks"}\NormalTok{,}
+                      \DataTypeTok{ylab=}\StringTok{"Number of egg masses"}\NormalTok{,}
+                      \DataTypeTok{main=}\KeywordTok{paste0}\NormalTok{(}\StringTok{"Number of egg masses over "}\NormalTok{,xlim,}\StringTok{" weeks"}\NormalTok{)}
+\NormalTok{))}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{mean}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Eggs),}\DataTypeTok{col=}\NormalTok{col,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{6}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(}\KeywordTok{max}\NormalTok{(ylim)}\OperatorTok{/}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{1}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DataTypeTok{at=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"0"}\NormalTok{,}\StringTok{""}\NormalTok{))}\CommentTok{# bookending axis tick marks}
+
+\NormalTok{### uninfected }\AlertTok{###}
+\KeywordTok{with}\NormalTok{(eggs_UU, }\KeywordTok{stripchart}\NormalTok{(Eggs}\OperatorTok{~}\NormalTok{Week,}
+                         \DataTypeTok{method=}\StringTok{"jitter"}\NormalTok{, }\DataTypeTok{jitter=}\FloatTok{0.1}\NormalTok{,}
+                         \DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{,}
+                         \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col,}\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{),}
+                         \DataTypeTok{vertical=}\NormalTok{T,}
+                         \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+                         \DataTypeTok{group.names=}\KeywordTok{unique}\NormalTok{(eggs_UU}\OperatorTok{$}\NormalTok{Week),}
+                         \DataTypeTok{xlab=}\StringTok{"Weeks"}\NormalTok{,}
+                         \DataTypeTok{ylab=}\StringTok{"Number of egg masses"}\NormalTok{,}
+                         \DataTypeTok{main=}\StringTok{"Uninfected"}\NormalTok{)}
+\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{6}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(}\KeywordTok{max}\NormalTok{(ylim)}\OperatorTok{/}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{1}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DataTypeTok{at=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"0"}\NormalTok{,}\StringTok{"16"}\NormalTok{))}\CommentTok{# bookending axis tick marks}
+
+\NormalTok{### infected }\AlertTok{###}
+\KeywordTok{with}\NormalTok{(eggs_II, }\KeywordTok{stripchart}\NormalTok{(Eggs}\OperatorTok{~}\NormalTok{Week,}
+                         \DataTypeTok{method=}\StringTok{"jitter"}\NormalTok{, }\DataTypeTok{jitter=}\FloatTok{0.1}\NormalTok{,}
+                         \DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{,}
+                         \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(col2,}\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{),}
+                         \DataTypeTok{vertical=}\NormalTok{T,}
+                         \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+                         \DataTypeTok{group.names=}\KeywordTok{unique}\NormalTok{(eggs_II}\OperatorTok{$}\NormalTok{Week),}
+                         \DataTypeTok{xlab=}\StringTok{"Weeks"}\NormalTok{,}
+                         \DataTypeTok{ylab=}\StringTok{"Number of egg masses"}\NormalTok{,}
+                         \DataTypeTok{main=}\StringTok{"Infected"}\NormalTok{)}
+\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{6}\NormalTok{),}\DataTypeTok{y=}\KeywordTok{rep}\NormalTok{(}\KeywordTok{max}\NormalTok{(ylim)}\OperatorTok{/}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{pch=}\StringTok{"~"}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{1}\NormalTok{,}\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}\CommentTok{# add inoculation points}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DataTypeTok{at=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}\DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"0"}\NormalTok{,}\StringTok{"16"}\NormalTok{))}\CommentTok{# bookending axis tick marks}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-32-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Size class vs peri}
+\CommentTok{#~1000 eggs inoculated at 0,2,4,6 weeks}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Size class vs Egg mass (with
+schisto)}\label{size-class-vs-egg-mass-with-schisto}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\NormalTok{#### Egg masses > 0}
+\NormalTok{den <-}\StringTok{ }\KeywordTok{density}\NormalTok{(small}\OperatorTok{$}\NormalTok{Eggs[small}\OperatorTok{$}\NormalTok{Eggs}\OperatorTok{>}\DecValTok{0}\NormalTok{])}
+\NormalTok{den2 <-}\StringTok{ }\KeywordTok{density}\NormalTok{(int}\OperatorTok{$}\NormalTok{Eggs[int}\OperatorTok{$}\NormalTok{Eggs}\OperatorTok{>}\DecValTok{0}\NormalTok{])}
+\NormalTok{den3 <-}\StringTok{ }\KeywordTok{density}\NormalTok{(large}\OperatorTok{$}\NormalTok{Eggs[large}\OperatorTok{$}\NormalTok{Eggs}\OperatorTok{>}\DecValTok{0}\NormalTok{])}
+\NormalTok{xlim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den2}\OperatorTok{$}\NormalTok{x),}\DecValTok{100}\NormalTok{) }\CommentTok{#den2 xlim}
+\NormalTok{ylim <-}\StringTok{ }\KeywordTok{round_any}\NormalTok{(}\KeywordTok{max}\NormalTok{(den2}\OperatorTok{$}\NormalTok{y),}\FloatTok{0.01}\NormalTok{,ceiling) }\CommentTok{# den2 ylim}
+
+\NormalTok{colvec <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{9}\NormalTok{) }\CommentTok{# index for colfunc color palette in plot_it function}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(den,}
+     \DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(colfunc[colvec[}\DecValTok{1}\NormalTok{]],}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}
+     \DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,xlim),}
+     \DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim),}
+     \CommentTok{# type="h",# fills density}
+     \DataTypeTok{xlab=}\StringTok{"Number of egg masses"}\NormalTok{,}
+     \DataTypeTok{ylab=}\StringTok{"Density"}\NormalTok{,}
+     \DataTypeTok{main=}\StringTok{"Number of egg masses for each snail size class"}
+\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(den2,}\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(colfunc[colvec[}\DecValTok{2}\NormalTok{]])) }\CommentTok{# den2}
+\KeywordTok{lines}\NormalTok{(den3,}\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(colfunc[colvec[}\DecValTok{3}\NormalTok{]])) }\CommentTok{# den3}
+\CommentTok{# fill densities}
+\KeywordTok{polygon}\NormalTok{(den, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(colfunc[colvec[}\DecValTok{1}\NormalTok{]],}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{colfunc[colvec[}\DecValTok{1}\NormalTok{]]) }\CommentTok{# fill AUC}
+\KeywordTok{polygon}\NormalTok{(den2, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(colfunc[colvec[}\DecValTok{2}\NormalTok{]],}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{colfunc[colvec[}\DecValTok{2}\NormalTok{]]) }\CommentTok{# fill AUC}
+\KeywordTok{polygon}\NormalTok{(den3, }\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(colfunc[colvec[}\DecValTok{3}\NormalTok{]],}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{border=}\NormalTok{colfunc[colvec[}\DecValTok{3}\NormalTok{]]) }\CommentTok{# fill AUC}
+\CommentTok{# means}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(small}\OperatorTok{$}\NormalTok{Eggs),}\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(colfunc[colvec[}\DecValTok{1}\NormalTok{]]),}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(int}\OperatorTok{$}\NormalTok{Eggs),}\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(colfunc[colvec[}\DecValTok{2}\NormalTok{]]),}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\KeywordTok{mean}\NormalTok{(large}\OperatorTok{$}\NormalTok{Eggs),}\DataTypeTok{col=}\KeywordTok{adjustcolor}\NormalTok{(colfunc[colvec[}\DecValTok{3}\NormalTok{]]),}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,ylim)) }\CommentTok{# get mean}
+
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{family=}\StringTok{"mono"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"right"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Small"}\NormalTok{,}\StringTok{"Intermediate"}\NormalTok{,}\StringTok{"Large"}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(colfunc[colvec[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{]]),}
+       \DataTypeTok{bty=}\StringTok{"n"}\NormalTok{,}\DataTypeTok{pch=}\DecValTok{20}\NormalTok{,}\DataTypeTok{pt.cex=}\FloatTok{1.5}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{0.7}\NormalTok{,}\DataTypeTok{y.intersp =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{xjust =} \FloatTok{0.5}\NormalTok{,}
+       \DataTypeTok{title=}\StringTok{"Snail size class"}\NormalTok{,}\DataTypeTok{title.adj =} \FloatTok{0.3}\NormalTok{,}\DataTypeTok{text.font=}\DecValTok{2}\NormalTok{,}
+       \DataTypeTok{trace=}\NormalTok{T,}\DataTypeTok{inset=}\FloatTok{0.1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-33-1.pdf}
+
+\begin{verbatim}
+  xchar= 3.937 ; (yextra,ychar)= -0.00109 0.00109 
+  points2( 149.4 149.4 149.4 , 0.03055 0.02945 0.02836 , pch= 20 20 20 , ...) 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Uninfected}
+\NormalTok{small_UU <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(small,Schisto}\OperatorTok{==}\DecValTok{0}\NormalTok{)}
+\NormalTok{int_UU <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(int,Schisto}\OperatorTok{==}\DecValTok{0}\NormalTok{)}
+\NormalTok{large_UU <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(large,Schisto}\OperatorTok{==}\DecValTok{0}\NormalTok{)}
+\NormalTok{### Infected}
+\NormalTok{small_II <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(small,Schisto}\OperatorTok{==}\DecValTok{1}\NormalTok{)}
+\NormalTok{int_II <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(int,Schisto}\OperatorTok{==}\DecValTok{1}\NormalTok{)}
+\NormalTok{large_II <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(large,Schisto}\OperatorTok{==}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Egg Mass per Week}\label{egg-mass-per-week}
+
+\textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\CommentTok{# set data to appropriate class}
+\NormalTok{meso2}\OperatorTok{$}\NormalTok{Eggs <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(meso2}\OperatorTok{$}\NormalTok{Eggs)}
+\NormalTok{d <-}\StringTok{ }\NormalTok{meso2}
+\KeywordTok{ggplot}\NormalTok{(meso2, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Eggs, }\DataTypeTok{y =} \KeywordTok{as.factor}\NormalTok{(Week), }\DataTypeTok{fill=}\NormalTok{..x..)) }\OperatorTok{+}\StringTok{ }\CommentTok{# geom_density_ridges()}
+\StringTok{  }\CommentTok{# geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap}
+\StringTok{  }\CommentTok{# scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"}
+\StringTok{  }\KeywordTok{geom_density_ridges}\NormalTok{(}\DataTypeTok{scale =} \DecValTok{3}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.2}\NormalTok{,}\DataTypeTok{color=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{rel_min_height =} \FloatTok{0.01}\NormalTok{,}\DataTypeTok{fill=}\NormalTok{col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{"Number of egg masses per week "}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Number of egg masses"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Week"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\CommentTok{# theme_ridges(grid=F,center_axis_labels = T)}
+\StringTok{  }\KeywordTok{plot_it_gg}\NormalTok{(}\StringTok{"white"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-34-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{#### uninfected ####}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(meso2_UU, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Eggs, }\DataTypeTok{y =} \KeywordTok{as.factor}\NormalTok{(Week), }\DataTypeTok{fill=}\NormalTok{..x..)) }\OperatorTok{+}\StringTok{ }\CommentTok{# geom_density_ridges()}
+\StringTok{  }\CommentTok{# geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap}
+\StringTok{  }\CommentTok{# scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"}
+\StringTok{  }\KeywordTok{geom_density_ridges}\NormalTok{(}\DataTypeTok{scale =} \DecValTok{3}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.2}\NormalTok{,}\DataTypeTok{color=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{rel_min_height =} \FloatTok{0.01}\NormalTok{,}\DataTypeTok{fill=}\NormalTok{col,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{"Number of egg masses per week for uninfected hosts"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Number of egg masses"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Week"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\CommentTok{# theme_ridges(grid=F,center_axis_labels = T)}
+\StringTok{  }\KeywordTok{plot_it_gg}\NormalTok{(}\StringTok{"white"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-34-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{#### infected ####}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{bty=}\StringTok{"n"}\NormalTok{, }\DataTypeTok{las =} \DecValTok{1}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(meso2_II, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Eggs, }\DataTypeTok{y =} \KeywordTok{as.factor}\NormalTok{(Week), }\DataTypeTok{fill=}\NormalTok{..x..)) }\OperatorTok{+}\StringTok{ }\CommentTok{# geom_density_ridges()}
+\StringTok{  }\CommentTok{# geom_density_ridges_gradient(scale = 2, size=0.25, rel_min_height = 0.01,panel_scaling=T) +# scale = overlap}
+\StringTok{  }\CommentTok{# scale_fill_viridis(name = "Eggs", alpha=0.5, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"}
+\StringTok{  }\KeywordTok{geom_density_ridges}\NormalTok{(}\DataTypeTok{scale =} \DecValTok{3}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.2}\NormalTok{,}\DataTypeTok{color=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{rel_min_height =} \FloatTok{0.01}\NormalTok{,}\DataTypeTok{fill=}\NormalTok{col2,}\DataTypeTok{alpha=}\FloatTok{0.5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{"Number of egg masses per week for infected hosts"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Number of egg masses"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Week"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\CommentTok{# theme_ridges(grid=F,center_axis_labels = T)}
+\StringTok{  }\KeywordTok{plot_it_gg}\NormalTok{(}\StringTok{"white"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-34-3.pdf}
+
+\printbibliography
+
+\end{document}

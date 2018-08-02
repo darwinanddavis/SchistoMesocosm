@@ -1,29 +1,49 @@
 ---
 title: Mesocosm experiment plots
-author: 
-- |-
-  _^1^ Department of Biology, Emory University, 1510 Clifton Road NE, Atlanta, GA, USA, 30322_
-  ^['This Supplementary Material can be found at https://github.com/darwinanddavis/SchistoMesocosm']
+author: |
+ | Matthew Malishev^1^*
+ | David Civitello ^1^
+ | _^1^ Department of Biology, Emory University, 1510 Clifton Road NE, Atlanta, GA, USA, 30322_
 #bibliography:/Users/malishev/Documents/Melbourne Uni/Thesis_2016/library.bib
+fontsize: 10
+geometry: margin=1in
+documentclass: article
+linkcolor: pink
+urlcolor: blue
+citecolor: red
 output:
-  html_document:
-    code_folding: hide
-    depth: 3
-    number_sections: no
-    toc: yes
-    toc_float: yes
   pdf_document:
+    includes:
+      in_header: # add .tex file with header content
+    highlight: tango
     template: null
     toc: yes
+    toc_depth: 3
+    number_sections: false
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    df_print: tibble 
+    citation_package: biblatex # natbib
+    latex_engine: xelatex #pdflatex # lualatex
+    keep_tex: true # keep .tex file in dir 
+  html_document:
+    runtime: shiny
+    highlight: tango
+    code_folding: hide
+    toc: yes
+    toc_depth: 3
+    number_sections: no
+    toc_float: yes
   word_document:
     highlight: tango
     keep_md: yes
     pandoc_args: --smart
     #reference: mystyles.docx
     toc: yes
-includes:
+inludes:
   before_body: before_body.tex
-subtitle: Matthew Malishev^1^*, David Civitello^1^
+subtitle: 
 tags:
 - nothing
 - nothingness
@@ -32,11 +52,13 @@ params:
   version: !r getRversion()
   email: "matthew.malishev@gmail.com"
   dir: "/Users/malishev/Documents/Emory/research/mesocosm"
+  doi: https://github.com/darwinanddavis/UsefulCode
 classoption: portrait
 vignette: >
   %\VignetteIndexEntry{Mesocosm data for schisto shedding in snail hosts}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+# ^['https://github.com/darwinanddavis/UsefulCode'] # footnote
 ---
 
 <script type="text/x-mathjax-config">
@@ -50,24 +72,35 @@ vignette: >
 # render(f, output_format='pdf_document')
 ```
 
-```{r, echo = FALSE}
+```{r, set-options, echo = FALSE, cache = FALSE}
+options(width=100)
 knitr::opts_chunk$set(
- eval = TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, echo=TRUE, warning = FALSE, message = FALSE
+ eval = TRUE, # run code
+ # echo = FALSE, # hide code (for pdf)
+ comment ="",
+ tidy.opts=list(width.cutoff=100), # set width of code chunks in output
+ tidy=TRUE, # make output as tidy
+ message = FALSE,  # mask all messages
+ warning = FALSE, # mask all warnings 
+ size="small"
 )
 ```
 
+\    
+
 Date: `r params$date`  
 R version: `r params$version`   
-Corresponding author: `r params$email`
+Corresponding author: `r params$email`  
+This document can be found at `r params$doi`  
 
+\newpage  
+
+#### TO DO
 #### How much of the population does the sampling effort capture? 
 
 ## Overview  
 
-This document uses the schisto mesocosm 2016 data to explore cercariae production from snail hosts of different body sizes (diameter in mm and mass in mg) over a 14 week period under high and low N/P nutrient conditions. Host reproduction (egg masses) is also calculated.    
-  
----   
-\   
+This document uses the schisto mesocosm 2016 data to explore cercariae production from snail hosts of different body sizes (diameter in mm and mass in mg) over a 14 week period under high and low N/P nutrient conditions. Host reproduction (egg masses) is also calculated.      
   
 ### Install dependencies
 
@@ -310,7 +343,7 @@ points(x=c(1,3),y=rep(ylim/2,2),pch="~",col="red")# add inoculation points
 ### Snail size over time (weeks) per tank  
 
 #### Snail size density over time for all tanks (total = 48) have been saved as 'Size_per_tank_over_time.pdf' in `r params$dir`  
-\n
+\  
 ~1000 eggs inoculated at 0,2,4,6 weeks
 ```{r}
 
@@ -322,10 +355,10 @@ points(x=c(1,3),y=rep(ylim/2,2),pch="~",col="red")# add inoculation points
 
 # Eight replicates per size class and NP combo: six received schisto, two didn't. (Replication factor)
 ```
-
+  
+Select tank   
 ```{r echo = T}
-# Select tank #. Max 48   
-tank <- 45
+tank <- 5 # Select tank #. Max 48   
 ```
 
 ```{r}
@@ -349,7 +382,7 @@ ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_densi
 ```
 
 
-```{r echo = F, results = "hide"}
+```{r echo = F, results = "hide", include = F, eval = F}
 # save plots for each tank to drive
 tanks <- unique(meso1$Tank)
 
@@ -788,7 +821,6 @@ legend("topright",legend=c("Phytoplankton","Periphyton"),title="Resource type",
 par(bty="n", las = 1)
 #plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
 layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE)) # plot stacked plots
-par(mar=c(3.5,5,2,2))
 meso2$Week <- as.integer(meso2$Week)
 xlim <- max(meso2$Week)
 ylim <- round_any(max(meso2$Eggs),10)
