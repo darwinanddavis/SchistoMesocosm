@@ -8,7 +8,7 @@ author: |
 fontsize: 10
 geometry: margin=1in
 documentclass: article
-linkcolor: pink
+linkcolor: blue
 urlcolor: blue
 citecolor: red
 output:
@@ -20,17 +20,17 @@ output:
     toc: yes
     toc_depth: 3
     number_sections: false
-    fig_width: 7
-    fig_height: 6
+    fig_width: 6
+    fig_height: 5
     fig_caption: true
     df_print: tibble 
     citation_package: biblatex # natbib
-    latex_engine: xelatex #pdflatex # lualatex
+    latex_engine: pdflatex #xelatex  # lualatex
     keep_tex: true # keep .tex file in dir 
   html_document:
-    runtime: shiny
+    css: # custom.css
     highlight: tango
-    code_folding: hide
+    code_folding: show
     toc: yes
     toc_depth: 3
     number_sections: no
@@ -52,7 +52,7 @@ params:
   version: !r getRversion()
   email: "matthew.malishev@gmail.com"
   dir: "/Users/malishev/Documents/Emory/research/mesocosm"
-  doi: https://github.com/darwinanddavis/UsefulCode
+  doi: https://github.com/darwinanddavis/SchistoMesocosm
 classoption: portrait
 vignette: >
   %\VignetteIndexEntry{Mesocosm data for schisto shedding in snail hosts}
@@ -76,7 +76,7 @@ vignette: >
 options(width=100)
 knitr::opts_chunk$set(
  eval = TRUE, # run code
- # echo = FALSE, # hide code (for pdf)
+ echo = FALSE, # hide code (for pdf)
  comment ="",
  tidy.opts=list(width.cutoff=100), # set width of code chunks in output
  tidy=TRUE, # make output as tidy
@@ -96,7 +96,7 @@ This document can be found at `r params$doi`
 \newpage  
 
 #### TO DO
-#### How much of the population does the sampling effort capture? 
+* How much of the population does the sampling effort capture?   
 
 ## Overview  
 
@@ -128,8 +128,8 @@ library(ggtech)
 ```{r echo = TRUE, warning = FALSE, message = FALSE}
 wd <- params$dir # working dir is set in yaml header
 setwd(paste0(wd,"/"))
-f <- "meso1.csv"
-f2 <- "meso2.csv" 
+f <- "meso1_.csv"
+f2 <- "meso2_.csv" 
 ```
 
 ### Load data
@@ -140,26 +140,46 @@ colnames(meso2)[2] <- "NP" # fix col names
 meso2$Week <- as.integer(meso2$Week)
 str(meso2)
 meso1[is.na(meso1)] <- 0 ; meso2[is.na(meso2)] <- 0 # remove NAs
-mass <- 0.0096*(meso1$Diameter^3) # add mass to df
-meso1$Mass <- mass  
 ```
 
-Outlier
-```{r}
-print("Outlier"); meso1[which(meso1$Mass==max(meso1$Mass)),]
+```{r echo = F, results = "hide"}
+# outlier 
+print("Outlier"); meso1[which(meso1$Biomass==max(meso1$Biomass)),]
 outlier <- 0 # remove outlier from data?
-if(outlier==1){meso1 <- subset(meso1,Mass<max(Mass))}
+if(outlier==1){meso1 <- subset(meso1,Biomass<max(Biomass))}
 ```
 
-Cleaning Snail and Date cols
 ```{r}
-#unique(meso1$Snail)
-#unique(meso1$Date)
-sapply(meso1, function(x) sum(nchar(x))) # check number of characters in each col
+## Clean meso2 data  
+meso2$Schisto <- as.integer(as.factor(meso2$Schisto))-1# convert Y/N in Schisto col to 1/0
+# convert size to integers
+meso2$Size <- gsub("Intermediate","2Intermediate",meso2$Size)
+meso2$Size <- gsub("Small","1Small",meso2$Size)
+meso2$Size <- gsub("Large","3Large",meso2$Size)
+meso2$Size <- as.integer(as.factor(meso2$Size))
+
+### get snails with egg masses
+#### First get presence of schisto
+meso2_UU <-  subset(meso2,Schisto==0)
+meso2_II <- subset(meso2,Schisto==1)
+
+# get uninfected snails with egg masses
+eggs_UU <- subset(meso2_UU,Eggs>0)
+# get infected snails with egg masses
+eggs_II <- subset(meso2_II,Eggs>0)
+
+# get size classes
+small <- subset(meso2,Size==1) #small
+int <- subset(meso2,Size==2) #intermediate
+large <- subset(meso2,Size==3) #large
+
+# get NP conc
+high <- subset(meso2,NP=="High") # high NP conc
+low <- subset(meso2,NP=="Low") # low NP conc
 ```
 
-Set Cex sizes
 ```{r}
+## Set cex sizes
 cex_cer <- (meso1$Cercariae+1)/1000
 cex_sam <- meso1$Sampling_Effort/1.5
 cex_diam <- meso1$Diameter/3
@@ -221,11 +241,11 @@ meso1_II <- subset(meso1,subset=Cercariae>0)
 meso1_UU <- subset(meso1,subset=Cercariae==0)
 ```
 
----
+---  
 \  
 
 ##############################################################################
-## Mesocosm1 data sheet
+**Mesocosm 1 data sheet**  
 
 ### Snail size per tank   
 Shell diameter (mm) per tank    
@@ -342,12 +362,12 @@ points(x=c(1,3),y=rep(ylim/2,2),pch="~",col="red")# add inoculation points
 
 ### Snail size over time (weeks) per tank  
 
-#### Snail size density over time for all tanks (total = 48) have been saved as 'Size_per_tank_over_time.pdf' in `r params$dir`  
+**For all tanks (n = 48), see 'Size_per_tank_over_time.pdf' \   in `r params$dir`** 
+
 \  
 ~1000 eggs inoculated at 0,2,4,6 weeks
 ```{r}
 
-#### size dist per tank over time ('Snail size over time (weeks)' but for each tank)
 # Plot Tanks with large nutrients at the beginning versus tanks with lower nutrients
 # Pick high and low nutrient tanks to compare
 
@@ -356,9 +376,10 @@ points(x=c(1,3),y=rep(ylim/2,2),pch="~",col="red")# add inoculation points
 # Eight replicates per size class and NP combo: six received schisto, two didn't. (Replication factor)
 ```
   
-Select tank   
+Select tank. Max `max(meso1$Tank)`
 ```{r echo = T}
-tank <- 5 # Select tank #. Max 48   
+tank <- 12 # Select tank #. Max 48   
+paste0("Tank ",tank) 
 ```
 
 ```{r}
@@ -386,12 +407,14 @@ ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_densi
 # save plots for each tank to drive
 tanks <- unique(meso1$Tank)
 
+# layout(matrix(c(1,1,1,1), 2, 2, byrow = TRUE))# plot stacked plots
+
 pdf("Size_per_tank_over_time.pdf",onefile = T)
 # for (i in list(unique(meso1$Tank)[1:2])){
-for(i in 1:length(tanks)){ 
-par(bty="n", las = 1)
+for(i in 1:length(tanks)){
+  par(bty="n", las = 1)
   snail <- subset(meso1,subset=Tank==i) # get tank level individuals
-  grid.arrange( 
+  grid.arrange( # set loop for one plot per page   
   ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
     # scale = overlap
     geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
@@ -409,95 +432,161 @@ dev.off()
 
 ```
 
+### Snail size over time (weeks) per tank (High resources)
+
+```{r echo = F, results = "hide", include = F, eval = F}
+tanks_high <- unique(high$Tank)
+
+pdf("Size_per_tank_over_time_HIGH.pdf",onefile = T)
+# for(i in 1:length(tanks_high)){
+for(i in (tanks_high)[1:4]){
+  for(j in (tanks_low)[1:4]){
+  par(bty="n", las = 1)
+  snail <- subset(meso1,subset=Tank==i) # get tank level individuals
+  snail2 <- subset(meso1,subset=Tank==j) # get tank level individuals
+  grid.arrange( # set loop for one plot per page
+    # plot stacked plots
+    ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+    # scale = overlap
+    geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
+    # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
+    scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    xlim(c(0,25)) +
+    labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i)) +
+    xlab("Snail diameter (mm)") +
+    ylab("Week") +
+    plot_it_gg("white"),
+
+      ggplot(snail2, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+    # scale = overlap
+    geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
+    # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
+    scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    xlim(c(0,25)) +
+    labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i)) +
+    xlab("Snail diameter (mm)") +
+    ylab("Week") +
+    plot_it_gg("white")
+  )
+  }  
+}
+dev.off()
+```
+
+### Snail size over time (weeks) per tank (Low resources)
+
+```{r echo = F, results = "hide", include = F, eval = F}
+tanks_low <- unique(low$Tank)
+
+for(i in 1:length(tanks)){
+  par(bty="n", las = 1)
+  snail <- subset(meso1,subset=Tank==i) # get tank level individuals
+  grid.arrange( # set loop for one plot per page   
+  ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+    # scale = overlap
+    geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
+    # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
+    scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    xlim(c(0,25)) +
+    labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i)) +
+    xlab("Snail diameter (mm)") +
+    ylab("Week") +
+    plot_it_gg("white")
+  )
+}  
+```
+
+
 ### Body mass (mg) over time (weeks)   
 (Soft tissue dry mass in mg = 0.0096 * Diameter[in mm]^3)   
 ~1000 eggs inoculated at 0,2,4,6 weeks   
 
-Outer   
-Outlier  
 ```{r}
 par(bty="n", las = 1)
-#plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
 layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE))# plot stacked plots
-ylim <- round_any(max(meso1$Mass),100,ceiling)
-boxplot(Mass~Week, data=meso1,
+ylim <- round_any(max(meso1$Biomass),100,ceiling)
+boxplot(Biomass~Week, data=meso1,
         # xlim=c(0,max(meso1$Week)),
         ylim=c(0,ylim),
         col = col,
+        outer=F,
         notch = T,xlab="Week",ylab="Dry body mass (mg)",
         main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks"),
         xaxs = "i", yaxs = "i"
 )
-abline(h=mean(meso1$Mass),col=col,lty=3)
+abline(h=mean(meso1$Biomass),col=col,lty=3)
 points(x=c(1,3,5,7),y=rep(ylim/3,4),pch="~",col="red")# add inoculation points
 
 ### uninfected ###
-boxplot(Mass~Week, data=meso1_UU,
+boxplot(Biomass~Week, data=meso1_UU,
         # xlim=c(0,max(meso1$Week)),
         ylim=c(0,ylim),
         col = col,
+        outer=F,
         notch = T,xlab="Week",ylab="Dry body mass (mg)",
         main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks \n(uninfected)"),
         xaxs = "i", yaxs = "i"
 )
-abline(h=mean(meso1$Mass),col=col,lty=3)
+abline(h=mean(meso1$Biomass),col=col,lty=3)
 points(x=c(1,3,5,7),y=rep(ylim/3,4),pch="~",col="red")# add inoculation points
 ### infected ###
-ylim <- round_any(max(meso1_II$Mass),100,ceiling)
-boxplot(Mass~Week, data=meso1_II,
+ylim <- round_any(max(meso1_II$Biomass),100,ceiling)
+boxplot(Biomass~Week, data=meso1_II,
         # xlim=c(0,max(meso1$Week)),
         ylim=c(0,ylim),
         col = col2,
+        outer=F,
         notch = F,xlab="Week",ylab="Dry body mass (mg)",
         main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks \n(infected)"),
         xaxs = "i", yaxs = "i"
 )
-abline(h=mean(meso1$Mass),col=col2,lty=3)
+abline(h=mean(meso1$Biomass),col=col2,lty=3)
 points(x=c(1,3),y=rep(ylim/1.2,2),pch="~",col="red")# add inoculation points
 ```
-
-
-**Without outlier**    
-
-Outlier  
+  
 
 ```{r}
-outer <- meso1[which(meso1$Mass==max(meso1$Mass)),][,c("Mass","Cercariae")] # identify outlier
+outer <- meso1[which(meso1$Biomass==max(meso1$Biomass)),][,c("Biomass","Cercariae")] # identify outlier
 outer
 ```
 
+**Without max value of `as.numeric(outer)[1]`**      
 
 ```{r}
 par(bty="n", las = 1)
 #plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
 layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE))# plot stacked plots
-ylim <- round_any(max(meso1$Mass),100,ceiling)
-boxplot(Mass~Week, data=meso1,
+ylim <- round_any(max(meso1$Biomass),100,ceiling)
+boxplot(Biomass~Week, data=meso1,
         outline = F,
         # xlim=c(0,max(meso1$Week)),
-        ylim=c(0,60),
+        ylim=c(0,150),
         col = col,
         notch = T,xlab="Week",ylab="Dry body mass (mg)",
         main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks without outlier"),
         xaxs = "i", yaxs = "i"
 )
-abline(h=mean(meso1$Mass),col=col,lty=3)
+abline(h=mean(meso1$Biomass),col=col,lty=3)
 points(x=c(1,3,5,7),y=rep(ylim/3,4),pch="~",col="red")# add inoculation points
 
 ### uninfected ###
-boxplot(Mass~Week, data=meso1_UU,outline=F,
+boxplot(Biomass~Week, data=meso1_UU,
+        outline=F,
         # xlim=c(0,max(meso1$Week)),
-        ylim=c(0,60),
+        ylim=c(0,150),
         col = col,
         notch = T,xlab="Week",ylab="Dry body mass (mg)",
         main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks  \n(uninfected)"),
         xaxs = "i", yaxs = "i"
 )
-abline(h=mean(meso1$Mass),col=col,lty=3)
+abline(h=mean(meso1$Biomass),col=col,lty=3)
 points(x=c(1,3,5,7),y=rep(ylim/3,4),pch="~",col="red")# add inoculation points
 ### infected ###
-ylim <- round_any(max(meso1_II$Mass),100,ceiling)
-boxplot(Mass~Week, data=meso1_II,
+ylim <- round_any(max(meso1_II$Biomass),100,ceiling)
+boxplot(Biomass~Week, data=meso1_II,
         # xlim=c(0,max(meso1$Week)),
         ylim=c(0,ylim),
         col = col2,
@@ -505,14 +594,14 @@ boxplot(Mass~Week, data=meso1_II,
         main=paste0("Body mass (mg) over ",max(meso1$Week)," weeks  \n(infected)"),
         xaxs = "i", yaxs = "i"
 )
-abline(h=mean(meso1$Mass),col=col2,lty=3)
+abline(h=mean(meso1$Biomass),col=col2,lty=3)
 points(x=c(1,3),y=rep(ylim/1.2,2),pch="~",col="red")# add inoculation points
 ```
 
 ### Snail size and number of cercariae produced  
 Point size by cercariae number  
 ```{r}
-par(bty="n", las = 1)
+par(mfrow=c(1,1),bty="n", las = 1)
 #plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
 with(meso1,plot(Diameter,log(Cercariae),pch=20,
                 col=adjustcolor(col,alpha=0.5),
@@ -532,22 +621,23 @@ Linear log
 ```{r}
 par(bty="n", las = 1)
 #plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
-with(meso1,plot(log(Mass),Cercariae,pch=20,
+with(meso1,plot(log(Biomass),Cercariae,pch=20,
                 col=adjustcolor(col,alpha=0.5),
                 cex=cex_cer+0.5,
                 # cex=1.5,
                 ylab="Number of cercariae released over 90 mins",xlab="Log dry body mass (mg)"))
 title("Number of cercariae for each log snail mass (mg)")
-abline(v=log(mean(meso1$Mass)),lty=3,col=col)# mean diameter
-outer <- meso1[which(meso1$Mass==max(meso1$Mass)),][,c("Mass","Cercariae")] # identify outlier
+abline(v=log(mean(meso1$Biomass)),lty=3,col=col)# mean diameter
+# identify outlier
 points(outer,col="red",pch=20) # plot outlier
 ```
 
 ### Snail size per tank   
 Shell diameter (mm)   
-Select tank #. max 48   
+Select tank. Max `max(meso1$Tank)`  
 ```{r}
-tank <- 2
+tank <- 24
+paste0("Tank ", tank)
 ```
 
 ```{r}
@@ -610,7 +700,7 @@ Cercariae shed over 90 mins per week
 ~1000 eggs inoculated at 0,2,4,6 weeks    
 Snail abundance over time (weeks)    
 ```{r}
-par(bty="n", las = 1)
+par(mfrow=c(1,1), bty="n", las = 1)
 #plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
 xlim <- max(meso1$Week) # uses total num of weeks
 ylim <- round_any(max(meso1$Cercariae),100,ceiling)
@@ -627,12 +717,12 @@ title(main=paste0("Cercariae production over ",max(meso1$Week)," weeks"),
 title(ylab="Number of cercariae shed in 90 mins",line=3.5)
 ```
 
-
 ### Tank cercariae production over time per tank  
 
-Select tank #. max 48
+Select tank. Max `max(meso1$Tank)`
 ```{r}
-tank <- 9
+tank <- 24
+paste0("Tank ", tank)
 ```
 
 ```{r}
@@ -660,48 +750,21 @@ if(length(snail$Cercariae)>0){
   title(ylab="Number of cercariae shed in 90 mins",line=3.5)
   par(new=T)
   points(x=c(0,2,4,6),y=rep(max(snail$Cercariae)/3,4),pch="~",cex=1.5,col="red")# add inoculation points
-}else{print(paste0("No cercariae in tank #",tank))}
+}else{
+    plot(0,0,type="n");title(main=paste0("Cercariae production for tank ",tank))
+  text(0,0.5,paste0("No cercariae \nin tank #",tank))
+}
 
-#####
-
-############################################################################################################
-############################################################################################################
-############################################################################################################
+####################################################################################
+####################################################################################
 
 ```
 
-#####
-## Mesocosm 2 data sheet
-Clean data
-```{r}
-meso2$Schisto <- as.integer(as.factor(meso2$Schisto))-1# convert Y/N in Schisto col to 1/0
-# convert size to integers
-meso2$Size <- gsub("Intermediate","2Intermediate",meso2$Size)
-meso2$Size <- gsub("Small","1Small",meso2$Size)
-meso2$Size <- gsub("Large","3Large",meso2$Size)
-meso2$Size <- as.integer(as.factor(meso2$Size))
+\newpage    
 
-### get snails with egg masses
-#### First get presence of schisto
-meso2_UU <-  subset(meso2,Schisto==0)
-meso2_II <- subset(meso2,Schisto==1)
+**Mesocosm 2 data sheet**  
 
-# get uninfected snails with egg masses
-eggs_UU <- subset(meso2_UU,Eggs>0)
-# get infected snails with egg masses
-eggs_II <- subset(meso2_II,Eggs>0)
-
-# get size classes
-small <- subset(meso2,Size==1) #small
-int <- subset(meso2,Size==2) #intermediate
-large <- subset(meso2,Size==3) #large
-
-# get NP conc
-high <- subset(meso2,NP=="High") # high NP conc
-low <- subset(meso2,NP=="Low") # low NP conc
-```
 ### Egg mass distribution
-
 
 ```{r}
 par(bty="n", las = 1)
@@ -777,7 +840,6 @@ title(main=paste0("Infected snails"),
 
 phyto = flourescence units    
 peri = flourescence per 2 weeks / 3.5 inch^2 tile (gross productivity biomass rate)    
-
 ```{r}
 par(bty="n", las = 1)
 par(mfrow=c(1,1))
@@ -815,8 +877,10 @@ legend("topright",legend=c("Phytoplankton","Periphyton"),title="Resource type",
 )
 ```
 
-### Egg Mass over time v presence of schisto
-~1000 eggs inoculated at 0,2,4,6 weeks
+### Egg Mass over time v presence of schisto  
+
+~1000 eggs inoculated at 0,2,4,6 weeks  
+
 ```{r}
 par(bty="n", las = 1)
 #plot_it(0,"blue","YlOrRd",1,"HersheySans") # set col function params
@@ -878,7 +942,6 @@ axis(1,at=c(0,xlim),labels=c("0","16"))# bookending axis tick marks
 
 ### Size class vs Egg mass (with schisto)
 
-
 ```{r}
 par(bty="n", las = 1)
 #### Egg masses > 0
@@ -927,11 +990,9 @@ large_II <- subset(large,Schisto==1)
 
 ```
 
-### Egg Mass per Week
+### Egg Mass over time (weeks)   
 
-
-~1000 eggs inoculated at 0,2,4,6 weeks
-
+~1000 eggs inoculated at 0,2,4,6 weeks  
 
 ```{r}
 par(bty="n", las = 1)
