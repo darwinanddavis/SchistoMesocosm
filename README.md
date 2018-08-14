@@ -7,8 +7,8 @@
 :link: [Civitello, D. J., Fatima, H. , Johnson, L. R., Nisbet, R. M., Rohr, J. R. and Ben‐Ami, F. (2018), Bioenergetic theory predicts infection dynamics of human schistosomes in intermediate host snails across ecological gradients. Ecol Lett, 21: 692-701](https://onlinelibrary.wiley.com/doi/abs/10.1111/ele.12937)  
 
 Versions:    
- > R 3.5.0    
- > RStudio 1.1.453    
+ - R 3.5.0    
+ - RStudio 1.1.453  
 
 ******  
 
