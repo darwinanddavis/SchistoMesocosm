@@ -83,6 +83,9 @@
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
 \IfFileExists{parskip.sty}{%
 \usepackage{parskip}
 }{% else
@@ -110,10 +113,10 @@
 
 
 \title{Mesocosm experiment plots}
-\author{Matthew Malishev\textsuperscript{1}*\\
-David Civitello \textsuperscript{1}\\
-\emph{\textsuperscript{1} Department of Biology, Emory University, 1510
-Clifton Road NE, Atlanta, GA, USA, 30322}}
+\author{Matthew Malishev\textsuperscript{1}* \& David Civitello
+\textsuperscript{1}\\[2\baselineskip]\emph{\textsuperscript{1}
+Department of Biology, Emory University, 1510 Clifton Road NE, Atlanta,
+GA, USA, 30322}}
 \date{}
 
 \begin{document}
@@ -126,7 +129,7 @@ Clifton Road NE, Atlanta, GA, USA, 30322}}
 }
 ~
 
-Date: 2018-08-10\\
+Date: 2018-08-17\\
 R version: 3.5.0\\
 Corresponding author:
 \href{mailto:matthew.malishev@gmail.com}{\nolinkurl{matthew.malishev@gmail.com}}\\
@@ -135,12 +138,32 @@ This document can be found at
 
 \newpage  
 
+\textbf{Follow instructions in code chunks labelled `fileoutput' to
+toggle pdf of plots saved to directory on/off
+(`Size\_per\_tank\_over\_time.pdf')}
+
+~
+
 \paragraph{TO DO}\label{to-do}
 
 \begin{itemize}
 \tightlist
 \item
   How much of the population does the sampling effort capture?
+\item
+  \sout{Scale diameter densities per tank over time to upper limit of
+  each tank (set ylim to highest value for each tank)}\\
+\item
+  Scale diameter densities per tank over time to upper limit of all
+  tanks (set ylim to highest value for all tanks)\\
+\item
+  Split plots by line color code showing point where snails are
+  reproductive viable (8 mm and above).
+\item
+  Which tanks and conditions reach reproductive size?\\
+\item
+  \sout{Replot by size class and resource combo e.g.~low resources and
+  small size class v low resources and large size class}
 \end{itemize}
 
 \subsection{Overview}\label{overview}
@@ -239,7 +262,7 @@ in /Users/malishev/Documents/Emory/research/mesocosm}
 
 ~ \textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks
 
-Select tank. Max \texttt{max(meso1\$Tank)}
+Select tank. Max 48
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -257,8 +280,38 @@ Select tank. Max \texttt{max(meso1\$Tank)}
 \subsubsection{Snail size over time (weeks) per tank (High
 resources)}\label{snail-size-over-time-weeks-per-tank-high-resources}
 
+~ \textbf{See ``Size\_per\_tank\_over\_time\_HIGH.pdf'' ~ in
+/Users/malishev/Documents/Emory/research/mesocosm}
+
 \subsubsection{Snail size over time (weeks) per tank (Low
 resources)}\label{snail-size-over-time-weeks-per-tank-low-resources}
+
+~ \textbf{See ``Size\_per\_tank\_over\_time\_LOW.pdf'' ~ in
+/Users/malishev/Documents/Emory/research/mesocosm}
+
+\subsubsection{Large snails over time (weeks) per tank (High
+resources)}\label{large-snails-over-time-weeks-per-tank-high-resources}
+
+~ \textbf{See ``Size\_per\_tank\_over\_time\_HIGH\_LARGE.pdf'' ~ in
+/Users/malishev/Documents/Emory/research/mesocosm}
+
+\subsubsection{Large snails over time (weeks) per tank (low
+resources)}\label{large-snails-over-time-weeks-per-tank-low-resources}
+
+~ \textbf{See ``Size\_per\_tank\_over\_time\_LOW\_LARGE.pdf'' ~ in
+/Users/malishev/Documents/Emory/research/mesocosm}
+
+\subsubsection{Small snails over time (weeks) per tank (High
+resources)}\label{small-snails-over-time-weeks-per-tank-high-resources}
+
+~ \textbf{See ``Size\_per\_tank\_over\_time\_HIGH\_SMALL.pdf'' ~ in
+/Users/malishev/Documents/Emory/research/mesocosm}
+
+\subsubsection{Small snails over time (weeks) per tank (low
+resources)}\label{small-snails-over-time-weeks-per-tank-low-resources}
+
+~ \textbf{See ``Size\_per\_tank\_over\_time\_LOW\_SMALL.pdf'' ~ in
+/Users/malishev/Documents/Emory/research/mesocosm}
 
 \subsubsection{Body mass (mg) over time
 (weeks)}\label{body-mass-mg-over-time-weeks}
@@ -266,7 +319,7 @@ resources)}\label{snail-size-over-time-weeks-per-tank-low-resources}
 (Soft tissue dry mass in mg = 0.0096 * Diameter{[}in mm{]}\^{}3)\\
 \textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-16-1.pdf}
 
 \begin{verbatim}
 # A tibble: 1 x 2
@@ -277,30 +330,30 @@ resources)}\label{snail-size-over-time-weeks-per-tank-low-resources}
 
 \textbf{Without max value of \texttt{as.numeric(outer){[}1{]}}}
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-21-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-18-1.pdf}
 
 \subsubsection{Snail size and number of cercariae
 produced}\label{snail-size-and-number-of-cercariae-produced}
 
 Point size by cercariae number\\
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-22-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-19-1.pdf}
 Linear log
 
 \subsubsection{Snail mass and cercariae produced
 (mg)}\label{snail-mass-and-cercariae-produced-mg}
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-24-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-21-1.pdf}
 
 \subsubsection{Snail size per tank}\label{snail-size-per-tank-1}
 
 Shell diameter (mm)\\
-Select tank. Max \texttt{max(meso1\$Tank)}
+Select tank. Max 48
 
 \begin{verbatim}
 [1] "Tank 24"
 \end{verbatim}
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-26-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-23-1.pdf}
 
 \subsubsection{Cercariae production over
 time}\label{cercariae-production-over-time}
@@ -308,12 +361,12 @@ time}\label{cercariae-production-over-time}
 Cercariae shed over 90 mins per week\\
 \textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks\\
 Snail abundance over time (weeks)\\
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-27-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-24-1.pdf}
 
 \subsubsection{Tank cercariae production over time per
 tank}\label{tank-cercariae-production-over-time-per-tank}
 
-Select tank. Max \texttt{max(meso1\$Tank)}
+Select tank. Max 48
 
 \begin{verbatim}
 [1] "Tank 24"
@@ -323,7 +376,7 @@ Select tank. Max \texttt{max(meso1\$Tank)}
 [1] 2300
 \end{verbatim}
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-29-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-26-1.pdf}
 
 \newpage    
 
@@ -331,12 +384,12 @@ Select tank. Max \texttt{max(meso1\$Tank)}
 
 \subsubsection{Egg mass distribution}\label{egg-mass-distribution}
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-30-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-27-1.pdf}
 
 \subsubsection{N/P concentration v egg
 mass}\label{np-concentration-v-egg-mass}
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-31-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-28-1.pdf}
 
 \subsubsection{Phyto and Peri
 Distribution}\label{phyto-and-peri-distribution}
@@ -344,19 +397,19 @@ Distribution}\label{phyto-and-peri-distribution}
 phyto = flourescence units\\
 peri = flourescence per 2 weeks / 3.5 inch\^{}2 tile (gross productivity
 biomass rate)\\
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-32-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-29-1.pdf}
 
 \subsubsection{Egg Mass over time v presence of
 schisto}\label{egg-mass-over-time-v-presence-of-schisto}
 
 \textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-33-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-30-1.pdf}
 
 \subsubsection{Size class vs Egg mass (with
 schisto)}\label{size-class-vs-egg-mass-with-schisto}
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-34-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-31-1.pdf}
 
 \begin{verbatim}
   xchar= 4.765 ; (yextra,ychar)= -0.001435 0.001435 
@@ -368,9 +421,9 @@ schisto)}\label{size-class-vs-egg-mass-with-schisto}
 
 \textasciitilde{}1000 eggs inoculated at 0,2,4,6 weeks
 
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-35-1.pdf}
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-35-2.pdf}
-\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-35-3.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-32-1.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-32-2.pdf}
+\includegraphics{snail_mesocosm_files/figure-latex/unnamed-chunk-32-3.pdf}
 
 \printbibliography
 

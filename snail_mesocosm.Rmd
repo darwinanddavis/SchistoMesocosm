@@ -1,8 +1,8 @@
 ---
 title: Mesocosm experiment plots
 author: |
- | Matthew Malishev^1^*
- | David Civitello ^1^
+ | Matthew Malishev^1^* & David Civitello ^1^
+ | 
  | _^1^ Department of Biology, Emory University, 1510 Clifton Road NE, Atlanta, GA, USA, 30322_
 #bibliography:/Users/malishev/Documents/Melbourne Uni/Thesis_2016/library.bib
 fontsize: 10
@@ -95,8 +95,17 @@ This document can be found at `r params$doi`
 
 \newpage  
 
+**Follow instructions in code chunks labelled 'fileoutput' to toggle pdf of plots saved to directory on/off ('Size_per_tank_over_time.pdf')**  
+
+\ 
+
 #### TO DO
-* How much of the population does the sampling effort capture?   
+* How much of the population does the sampling effort capture? 
+* ~~Scale diameter densities per tank over time to upper limit of each tank (set ylim to highest value for each tank)~~   
+* Scale diameter densities per tank over time to upper limit of all tanks (set ylim to highest value for all tanks)   
+* Split plots by line color code showing point where snails are reproductive viable (8 mm and above).
+* Which tanks and conditions reach reproductive size?  
+* ~~Replot by size class and resource combo e.g. low resources and small size class v low resources and large size class~~    
 
 ## Overview  
 
@@ -376,7 +385,7 @@ points(x=c(1,3),y=rep(ylim/2,2),pch="~",col="red")# add inoculation points
 # Eight replicates per size class and NP combo: six received schisto, two didn't. (Replication factor)
 ```
   
-Select tank. Max `max(meso1$Tank)`
+Select tank. Max `r max(meso1$Tank)`
 ```{r echo = T}
 tank <- 12 # Select tank #. Max 48   
 paste0("Tank ",tank) 
@@ -402,8 +411,8 @@ ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_densi
 
 ```
 
-
-```{r echo = F, results = "hide", include = F, eval = F}
+```{r fileoutput1, echo = F, results = "hide", include = F, eval = F}
+# ```{r fileoutput1 echo = T, include = T, eval = T } # uncomment this line to save plot to local dir
 # save plots for each tank to drive
 tanks <- unique(meso1$Tank)
 
@@ -415,12 +424,14 @@ for(i in 1:length(tanks)){
   par(bty="n", las = 1)
   snail <- subset(meso1,subset=Tank==i) # get tank level individuals
   grid.arrange( # set loop for one plot per page   
-  ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+  ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x.., height=..density..)) + # geom_density_ridges()
     # scale = overlap
-    geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
-    geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
+    geom_density_ridges_gradient(stat="density",scale = 5, size=0.2,color="black", rel_min_height = 0.01,alpha=0.2,panel_scaling=F) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2,panel_scaling=F) +
+        # geom_ridgeline(stat="density",scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2,panel_scaling=F) +
     # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
     scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    geom_vline(xintercept=8, colour="red", linetype="dotted",size=0.5) +
     xlim(c(0,25)) +
     labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i)) +
     xlab("Snail diameter (mm)") +
@@ -432,73 +443,202 @@ dev.off()
 
 ```
 
-### Snail size over time (weeks) per tank (High resources)
+### Snail size over time (weeks) per tank (High resources)  
+\ 
+**See "Size_per_tank_over_time_HIGH.pdf" \   in `r params$dir`**  
 
-```{r echo = F, results = "hide", include = F, eval = F}
+```{r fileoutput2, echo = F, results = "hide", include = F, eval = F}
+# ```{r fileoutput2 echo = T, include = T, eval = T } # uncomment this line to save plot to local dir 
 tanks_high <- unique(high$Tank)
 
+# layout_matrix=layout(matrix(c(1,1,1,1), 2, 2, byrow = TRUE)) # plot stacked plots
+
 pdf("Size_per_tank_over_time_HIGH.pdf",onefile = T)
-# for(i in 1:length(tanks_high)){
-for(i in (tanks_high)[1:4]){
-  for(j in (tanks_low)[1:4]){
+for(i in tanks_high){
   par(bty="n", las = 1)
   snail <- subset(meso1,subset=Tank==i) # get tank level individuals
-  snail2 <- subset(meso1,subset=Tank==j) # get tank level individuals
   grid.arrange( # set loop for one plot per page
-    # plot stacked plots
-    ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+    ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x.., height=..density..)) + # geom_density_ridges()
     # scale = overlap
-    geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
-    geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
-    # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
-    scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    # geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2,panel_scaling=F) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5,panel_scaling=F) +
+    # scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    geom_vline(xintercept=8, colour=col, linetype="dotted",size=0.5) +
     xlim(c(0,25)) +
-    labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i)) +
-    xlab("Snail diameter (mm)") +
-    ylab("Week") +
-    plot_it_gg("white"),
-
-      ggplot(snail2, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
-    # scale = overlap
-    geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
-    geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
-    # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
-    scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
-    xlim(c(0,25)) +
-    labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i)) +
+    labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i," (high resources)")) +
     xlab("Snail diameter (mm)") +
     ylab("Week") +
     plot_it_gg("white")
-  )
+)
   }  
-}
 dev.off()
 ```
 
-### Snail size over time (weeks) per tank (Low resources)
+### Snail size over time (weeks) per tank (Low resources)  
+\ 
+**See "Size_per_tank_over_time_LOW.pdf" \   in `r params$dir`**  
 
-```{r echo = F, results = "hide", include = F, eval = F}
+```{r fileoutput3, echo = F, results = "hide", include = F, eval = F}
+# ```{r fileoutput3 echo = T, include = T, eval = T } # uncomment this line to save plot to local dir
 tanks_low <- unique(low$Tank)
 
-for(i in 1:length(tanks)){
+pdf("Size_per_tank_over_time_LOW.pdf",onefile = T)
+for(i in tanks_low){
   par(bty="n", las = 1)
   snail <- subset(meso1,subset=Tank==i) # get tank level individuals
   grid.arrange( # set loop for one plot per page   
-  ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x..)) + # geom_density_ridges()
+  ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x.., height=..density..)) + # geom_density_ridges()
     # scale = overlap
-    geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
-    geom_density_ridges(scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2) +
-    # geom_density_ridges(scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5) +
-    scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    # geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2,panel_scaling=F) +
+    geom_density_ridges(stat="density", scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col2,alpha=0.5,panel_scaling=F) +
+    # scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    geom_vline(xintercept=8, colour=col2, linetype="dotted",size=0.5) +
     xlim(c(0,25)) +
-    labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i)) +
+    labs(title = paste0("Snail diameter over ", max(meso1$Week)," weeks for tank ",i," (low resources)")) +
     xlab("Snail diameter (mm)") +
     ylab("Week") +
     plot_it_gg("white")
   )
 }  
+dev.off()
 ```
 
+### Large snails over time (weeks) per tank (High resources)
+\ 
+**See "Size_per_tank_over_time_HIGH_LARGE.pdf" \   in `r params$dir`**  
+
+```{r fileoutput4, echo = F, results = "hide", include = F, eval = F}
+# ```{r fileoutput2 echo = T, include = T, eval = T } # uncomment this line to save plot to local dir 
+tt <- "Large"
+high_large <- subset(high,Size==3)
+tanks_high_large <- unique(high_large$Tank)
+
+# layout_matrix=layout(matrix(c(1,1,1,1), 2, 2, byrow = TRUE)) # plot stacked plots
+
+pdf("Size_per_tank_over_time_HIGH_LARGE.pdf",onefile = T)
+for(i in tanks_high_large){
+  par(bty="n", las = 1)
+  snail <- subset(meso1,subset=Tank==i) # get tank level individuals
+  grid.arrange( # set loop for one plot per page
+    ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x.., height=..density..)) + # geom_density_ridges()
+    # scale = overlap
+    # geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2,panel_scaling=F) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5,panel_scaling=F) +
+    # scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    geom_vline(xintercept=8, colour=col, linetype="dotted",size=0.5) +
+    xlim(c(0,25)) +
+    labs(title = paste0(tt, " snails over ", max(meso1$Week)," weeks for tank ",i," (high resources)")) +
+    xlab("Snail diameter (mm)") +
+    ylab("Week") +
+    plot_it_gg("white")
+)
+  }  
+dev.off()
+```
+
+### Large snails over time (weeks) per tank (low resources)
+\ 
+**See "Size_per_tank_over_time_LOW_LARGE.pdf" \   in `r params$dir`**    
+
+```{r fileoutput5, echo = F, results = "hide", include = F, eval = F}
+# ```{r fileoutput2 echo = T, include = T, eval = T } # uncomment this line to save plot to local dir 
+tt <- "Large"
+low_large <- subset(low,Size==3)
+tanks_low_large <- unique(low_large$Tank)
+
+# layout_matrix=layout(matrix(c(1,1,1,1), 2, 2, byrow = TRUE)) # plot stacked plots
+
+pdf("Size_per_tank_over_time_LOW_LARGE.pdf",onefile = T)
+for(i in tanks_low_large){
+  par(bty="n", las = 1)
+  snail <- subset(meso1,subset=Tank==i) # get tank level individuals
+  grid.arrange( # set loop for one plot per page
+    ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x.., height=..density..)) + # geom_density_ridges()
+    # scale = overlap
+    # geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2,panel_scaling=F) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col2,alpha=0.5,panel_scaling=F) +
+    # scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    geom_vline(xintercept=8, colour=col2, linetype="dotted",size=0.5) +
+    xlim(c(0,25)) +
+    labs(title = paste0(tt, " snails over ", max(meso1$Week)," weeks for tank ",i," (low resources)")) +
+    xlab("Snail diameter (mm)") +
+    ylab("Week") +
+    plot_it_gg("white")
+)
+  }  
+dev.off()
+```
+
+### Small snails over time (weeks) per tank (High resources)
+\ 
+**See "Size_per_tank_over_time_HIGH_SMALL.pdf" \   in `r params$dir`**  
+
+```{r fileoutput6, echo = F, results = "hide", include = F, eval = F}
+# ```{r fileoutput2 echo = T, include = T, eval = T } # uncomment this line to save plot to local dir 
+tt <- "Small"
+high_small <- subset(high,Size==1)
+tanks_high_small <- unique(high_small$Tank)
+
+# layout_matrix=layout(matrix(c(1,1,1,1), 2, 2, byrow = TRUE)) # plot stacked plots
+
+pdf("Size_per_tank_over_time_HIGH_SMALL.pdf",onefile = T)
+for(i in tanks_high_small){
+  par(bty="n", las = 1)
+  snail <- subset(meso1,subset=Tank==i) # get tank level individuals
+  grid.arrange( # set loop for one plot per page
+    ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x.., height=..density..)) + # geom_density_ridges()
+    # scale = overlap
+    # geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2,panel_scaling=F) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col,alpha=0.5,panel_scaling=F) +
+    # scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    geom_vline(xintercept=8, colour=col, linetype="dotted",size=0.5) +
+    xlim(c(0,25)) +
+    labs(title = paste0(tt, " snails over ", max(meso1$Week)," weeks for tank ",i," (high resources)")) +
+    xlab("Snail diameter (mm)") +
+    ylab("Week") +
+    plot_it_gg("white")
+)
+  }  
+dev.off()
+```
+### Small snails over time (weeks) per tank (low resources)
+\ 
+**See "Size_per_tank_over_time_LOW_SMALL.pdf" \   in `r params$dir`**  
+
+```{r fileoutput7, echo = F, results = "hide", include = F, eval = F}
+# ```{r fileoutput2 echo = T, include = T, eval = T } # uncomment this line to save plot to local dir 
+tt <- "Small"
+low_small <- subset(low,Size==1)
+tanks_low_small <- unique(low_small$Tank)
+
+# layout_matrix=layout(matrix(c(1,1,1,1), 2, 2, byrow = TRUE)) # plot stacked plots
+
+pdf("Size_per_tank_over_time_LOW_SMALL.pdf",onefile = T)
+for(i in tanks_low_small){
+  par(bty="n", las = 1)
+  snail <- subset(meso1,subset=Tank==i) # get tank level individuals
+  grid.arrange( # set loop for one plot per page
+    ggplot(snail, aes(x = Diameter, y = as.factor(Week), fill=..x.., height=..density..)) + # geom_density_ridges()
+    # scale = overlap
+    # geom_density_ridges_gradient(scale = 5, size=0.2,color="black", rel_min_height = 0.01,panel_scaling=T,alpha=0.2) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="black", rel_min_height = 0.01,fill="white",alpha=0.2,panel_scaling=F) +
+    geom_density_ridges(stat="density",scale = 5, size=0.2,color="white", rel_min_height = 0.01,fill=col2,alpha=0.5,panel_scaling=F) +
+    # scale_fill_viridis(name = "Diameter", alpha=0.1, option = "magma",direction=-1) + # "magma", "inferno","plasma", "viridis", "cividis"
+    geom_vline(xintercept=8, colour=col2, linetype="dotted",size=0.5) +
+    xlim(c(0,25)) +
+    labs(title = paste0(tt, " snails over ", max(meso1$Week)," weeks for tank ",i," (low resources)")) +
+    xlab("Snail diameter (mm)") +
+    ylab("Week") +
+    plot_it_gg("white")
+)
+  }  
+dev.off()
+```
 
 ### Body mass (mg) over time (weeks)   
 (Soft tissue dry mass in mg = 0.0096 * Diameter[in mm]^3)   
@@ -634,7 +774,7 @@ points(outer,col="red",pch=20) # plot outlier
 
 ### Snail size per tank   
 Shell diameter (mm)   
-Select tank. Max `max(meso1$Tank)`  
+Select tank. Max `r max(meso1$Tank)`  
 ```{r}
 tank <- 24
 paste0("Tank ", tank)
@@ -719,7 +859,7 @@ title(ylab="Number of cercariae shed in 90 mins",line=3.5)
 
 ### Tank cercariae production over time per tank  
 
-Select tank. Max `max(meso1$Tank)`
+Select tank. Max `r max(meso1$Tank)`
 ```{r}
 tank <- 24
 paste0("Tank ", tank)
